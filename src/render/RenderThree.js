@@ -1,7 +1,8 @@
-// import * as RealAPI from "../public/js/RealAPI.js"
+import * as REAL from "../real_api/real.three-min.js"
 
 export async function RenderThree(scene) {
     // console.log(RealAPI);
+    console.log(REAL.Status);
 }
 
 function GetApiCredential() {
