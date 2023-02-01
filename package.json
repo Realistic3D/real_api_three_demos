@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack serve --config ./webpack.dev.js"
+    "dev": "webpack serve --config ./webpack.dev.js",
+    "update": "update.bat"
   },
   "repository": {
     "type": "git",
