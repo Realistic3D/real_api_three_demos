@@ -1,4 +1,4 @@
-import {EnumString, Status} from "../real_api/real.three-min.js";
+import {EnumString, Status} from "../real_api/real.three.min.js";
 
 
 export async function UpdateServices(userResponse, realAPI) {
