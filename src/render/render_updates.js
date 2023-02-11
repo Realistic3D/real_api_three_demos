@@ -21,12 +21,12 @@ export async function UpdateServices(userResponse, realAPI) {
                 console.error("Exporting failed");
                 return;
             }
-            const jobInfo = realAPI.jobInfo;
-            const uri = jobInfo.jobUri;
-            const scene = jobInfo.scene;
-            const upload = await ExportRestAPI(realAPI, uri, scene);
-            await realAPI.render(uri);
-            if(!upload) console.error("Uploading failed");
+            // const jobInfo = realAPI.jobInfo;
+            // const uri = jobInfo.jobUri;
+            // const scene = jobInfo.scene;
+            // const upload = await ExportRestAPI(realAPI, uri, scene);
+            // await realAPI.render(uri);
+            // if(!upload) console.error("Uploading failed");
             break;
         case Status.Download:
             // const file = data;

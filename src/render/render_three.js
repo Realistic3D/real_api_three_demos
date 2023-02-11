@@ -1,5 +1,6 @@
 import {UpdateServices} from "./render_updates.js";
 import * as REAL from "../real_api/real.three.min.js"
+import {RestTest} from "./rest_utils";
 
 
 export async function RenderThree(scene) {
@@ -72,6 +73,7 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
         case "Enter":
             break;
         case "t":
+            await RestTest(scene);
             break;
         case "l":
             // console.log("Login");
