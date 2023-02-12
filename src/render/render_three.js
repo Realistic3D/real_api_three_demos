@@ -1,6 +1,5 @@
 import {UpdateServices} from "./render_updates.js";
 import * as REAL from "../real_api/real.three.min.js"
-import {RestTest} from "./rest_utils";
 
 
 export async function RenderThree(scene) {
@@ -29,7 +28,7 @@ export async function RenderScene(realAPI, scene, camera) {
         console.log("Please login first")
         return;
     }
-    const exp = await REAL.RenderRealScene(realAPI, scene, camera);
+    const exp = await REAL.RenderScene(realAPI, scene, camera);
     switch (exp) {
         case REAL.ConvertStatus.SUCCESS:
             console.log("Exporting success");
@@ -73,7 +72,6 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
         case "Enter":
             break;
         case "t":
-            await RestTest(scene);
             break;
         case "l":
             // console.log("Login");

@@ -1,5 +1,4 @@
 import {EnumString, Status} from "../real_api/real.three.min.js";
-import {ExportRestAPI} from "./rest_utils.js";
 
 
 export async function UpdateServices(userResponse, realAPI) {
@@ -21,12 +20,11 @@ export async function UpdateServices(userResponse, realAPI) {
                 console.error("Exporting failed");
                 return;
             }
-            // const jobInfo = realAPI.jobInfo;
-            // const uri = jobInfo.jobUri;
-            // const scene = jobInfo.scene;
-            // const upload = await ExportRestAPI(realAPI, uri, scene);
-            // await realAPI.render(uri);
-            // if(!upload) console.error("Uploading failed");
+            console.log("EXPORTED")
+            break;
+        case Status.Upload:
+            console.log("Upload");
+            console.log(userResponse);
             break;
         case Status.Download:
             // const file = data;
