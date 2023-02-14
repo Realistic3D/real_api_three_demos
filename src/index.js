@@ -1,5 +1,5 @@
 import VueLazyLoad from "vue-lazyload";
-// import * as THREE from "three"
+import {Start} from "./demo/main";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -10,12 +10,12 @@ const app = new Vue({
     el: "#app",
     computed: {
         canvasBg: function () {
-            // return { background: "url() transparent" };
-            return { background: "url() #7D7D7D" };
+            return { background: "url() transparent" };
+            // return { background: "url() #7D7D7D" };
         }
     },
     async mounted() {
         console.log("START");
-        // console.log(THREE);
+        await Start(this.$refs.canvas)
     }
 })

@@ -1,14 +1,14 @@
 import * as THREE from "three"
-import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 
 export default class Scene{
-    constructor() {
+    constructor(canvas) {
         // const canvas = document.getElementById("main-canvas");
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
         // this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, canvas: canvas});
-        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true});
+        this.renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true});
         this.ambient = new THREE.AmbientLight(0x404040);
         this.sun = new THREE.DirectionalLight(0xffffff, 1);
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
