@@ -5,7 +5,7 @@ export async function UpdateServices(userResponse, realAPI) {
     const msg = userResponse.msg;
     const data = userResponse.data;
     const type = userResponse.type;
-    console.log(EnumString(type), msg);
+    // console.log(EnumString(type), msg);
     switch (type) {
         case Status.Login:
             //Anything that you want after login, otherwise ignore it

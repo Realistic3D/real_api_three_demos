@@ -1,4 +1,5 @@
 import * as THREE from "../../../node_modules/three/build/three.module.js"
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
 
 export default class Scene{
@@ -10,8 +11,14 @@ export default class Scene{
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true});
         this.ambient = new THREE.AmbientLight(0x404040);
         this.sun = new THREE.DirectionalLight(0xffffff, 1);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+
         this.setScene();
         this.render();
+        this.addControl();
+    }
+    addControl() {
+
     }
     add(item){
         this.scene.add(item);
