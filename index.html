@@ -4,8 +4,35 @@
     <meta charset="UTF-8">
     <title>Real API</title>
 </head>
-<script src="./config.js" type="text/javascript" charset="utf-8"></script>
-<body>
 
+<script type="text/javascript">
+    const head = document.getElementsByTagName('head')[0];
+    const url = "public/mix-manifest.json";
+    const request = new XMLHttpRequest();
+    request.open("get", url); /*设置请求方法与路径*/
+    request.send(null); /*不发送数据到服务器*/
+    request.onload = function() { /*XHR对象获取到返回信息后执行*/
+        if (request.status === 200) { /*返回状态为200，即为数据获取成功*/
+            let json = JSON.parse(request.responseText);
+            // console.log(json);
+            let script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'public' + json['/js/index.js'];
+            head.appendChild(script);
+            let link = document.createElement('link');
+            link.href = 'public' + json['/css/style.css'];
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            head.appendChild(link);
+        }
+    }
+</script>
+
+<body>
+<div id="app">
+    <div class="canvas" id="canvas">
+        <canvas id="canvas" ref="canvas" :style="canvasBg"></canvas>
+    </div>
+</div>
 </body>
 </html>

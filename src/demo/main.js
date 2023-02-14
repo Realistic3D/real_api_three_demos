@@ -1,4 +1,4 @@
-import Scene from "./js/tools/Scene.js";
+import Scene from "./tools/Scene.js";
 import {LoadExample1} from "./examples/loadExample1.js";
 import {LoadExample2} from "./examples/loadExample2.js";
 import {RenderThree} from "./render/render_three.js";
