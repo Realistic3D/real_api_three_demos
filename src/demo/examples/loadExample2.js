@@ -20,11 +20,15 @@ export async function LoadExample2(scene) {
         renderer.outputEncoding = THREE.sRGBEncoding;
 
         base.traverse((o) => {
-            if (o.isMesh) o.castShadow = true;
+            if (o.isMesh) {
+                o.castShadow = true;
+                o.receiveShadow = true;
+                if(o.material.map) o.material.map.anisotropy = 16;
+            }
         });
 
         scene.add(base);
-        const target = new THREE.Vector3(60, 31, -87)
+        const target = new THREE.Vector3(30.5, 43.5, -32.5);
         camera.position.copy(target);
         scene.controls.target.set(target.x, target.y, target.z + 1);
         // scene.camera.position.z = 5;
@@ -37,5 +41,11 @@ export async function LoadExample2(scene) {
 }
 
 function AddLights(scene) {
+    const hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 1);
+    scene.add(hemiLight);
 
+    // const light = new THREE.SpotLight(0xffa95c,1);
+    // light.position.set(-50,50,50);
+    // light.castShadow = true;
+    // scene.add( light );
 }

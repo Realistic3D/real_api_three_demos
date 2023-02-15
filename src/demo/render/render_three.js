@@ -1,5 +1,5 @@
-import {UpdateServices} from "./render_updates.js";
-import * as REAL from "../real_api/real.three.min.js"
+import * as REAL from "../real_api/real.three.min";
+import {UpdateServices} from "./render_updates";
 
 
 export async function RenderThree(scene) {
