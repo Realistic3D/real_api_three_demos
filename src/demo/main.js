@@ -1,4 +1,6 @@
 import Scene from "./tools/Scene.js";
+import {LoadExample1} from "./examples/loadExample1";
+import {LoadExample2} from "./examples/loadExample2";
 // import {LoadExample1} from "./examples/loadExample1.js";
 // import {LoadExample2} from "./examples/loadExample2.js";
 // import {RenderThree} from "./render/render_three.js";
@@ -8,9 +10,8 @@ import Scene from "./tools/Scene.js";
 
 export async function Start(canvas) {
     const scene = new Scene(canvas);
-    console.log(scene)
-    // // await LoadExample1(scene);
-    // await LoadExample2(scene);
+    // await LoadExample1(scene);
+    await LoadExample2(scene);
     // await RenderThree(scene);
     return 1;
 }

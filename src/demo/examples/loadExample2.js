@@ -1,28 +1,41 @@
 import * as THREE from "three"
-import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
-import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import GLTFLoader from 'three-gltf-loader';
 
 
 export async function LoadExample2(scene) {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath( 'jsm/libs/draco/' );
+    // const model = "./models/gltf/PrimaryIonDrive.glb";
+    const model = "./models/gltf/Dusine/dusine.glb";
     const gltfLoader = new GLTFLoader();
-    gltfLoader.setDRACOLoader( dracoLoader );
-    const gltf = await gltfLoader.loadAsync( './models/gltf/kira.glb' );
+    gltfLoader.load(model, (mesh)=> {
+        const renderer = scene.renderer;
 
-    gltf.scene.traverse( n => {
+        const base = mesh.scene;
+        const camera = scene.camera;
+        console.log(base)
+        // const scale = 1000;
+        // base.scale.set(scale, scale, scale);
 
-        if ( n.name === 'head' ) OOI.head = n;
-        if ( n.name === 'lowerarm_l' ) OOI.lowerarm_l = n;
-        if ( n.name === 'Upperarm_l' ) OOI.Upperarm_l = n;
-        if ( n.name === 'hand_l' ) OOI.hand_l = n;
-        if ( n.name === 'target_hand_l' ) OOI.target_hand_l = n;
+        renderer.toneMappingExposure = 2.3
+        renderer.shadowMap.enabled = true;
+        renderer.outputEncoding = THREE.sRGBEncoding;
 
-        if ( n.name === 'boule' ) OOI.sphere = n;
-        if ( n.name === 'Kira_Shirt_left' ) OOI.kira = n;
+        base.traverse((o) => {
+            if (o.isMesh) o.castShadow = true;
+        });
 
-        if ( n.isMesh ) n.frustumCulled = false;
+        scene.add(base);
+        const target = new THREE.Vector3(60, 31, -87)
+        camera.position.copy(target);
+        scene.controls.target.set(target.x, target.y, target.z + 1);
+        // scene.camera.position.z = 5;
+        AddLights(scene);
 
-    } );
+
+    }, null, (e) => {
+        console.log(e);
+    });
+}
+
+function AddLights(scene) {
 
 }
