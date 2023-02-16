@@ -11,7 +11,7 @@ export async function LoadExample3(scene) {
 
         const base = mesh.scene;
         const camera = scene.camera;
-        console.log(base)
+        // console.log(base)
         // const scale = 1000;
         // base.scale.set(scale, scale, scale);
 
@@ -25,7 +25,6 @@ export async function LoadExample3(scene) {
                 o.castShadow = true;
                 o.receiveShadow = true;
                 // if(o.material.map) o.material.map.anisotropy = 16;
-                console.log(o.material.map)
             }
         });
 
