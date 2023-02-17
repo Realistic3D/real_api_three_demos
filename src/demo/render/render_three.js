@@ -57,7 +57,7 @@ function getRealAPP() {
         "0HYZ77ntJpnHxInjtBh3",
         product,
         {
-            test: true
+            test: false
         }
     );
 }
