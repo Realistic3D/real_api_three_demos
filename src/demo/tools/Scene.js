@@ -9,6 +9,8 @@ export default class Scene{
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, canvas: canvas});
         this.ambient = new THREE.AmbientLight(0x404040);
         this.sun = new THREE.DirectionalLight(0xffffff, 1);
+        // this.axes = new THREE.AxesHelper()
+        this.axes = new THREE.Group();
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.setScene();
         this.render();
@@ -21,6 +23,7 @@ export default class Scene{
         this.scene.add(item);
     }
     setScene(){
+        this.scene.add(this.axes);
         this.renderer.shadowMap.enabled = true;
         // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.shadowMap.needsUpdate = true;
@@ -43,6 +46,7 @@ export default class Scene{
         requestAnimationFrame(this.render.bind(this));
         this.renderer.render(this.scene, this.camera);
         this.controls.update();
+        this.camera.lookAt(this.axes.position);
         // console.log(this.camera.position)
     }
     onWindowResize() {

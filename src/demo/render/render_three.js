@@ -55,7 +55,10 @@ function getRealAPP() {
         "Real3D",
         "HDQ8ygWidtm9yosQ270m",
         "0HYZ77ntJpnHxInjtBh3",
-        product
+        product,
+        {
+            test: true
+        }
     );
 }
 
@@ -72,6 +75,9 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
         case "Enter":
             break;
         case "t":
+            console.log(camera.position);
+            console.log(camera.lookAt);
+            console.log(camera);
             break;
         case "l":
             // console.log("Login");
