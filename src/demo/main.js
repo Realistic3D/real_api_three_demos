@@ -1,6 +1,7 @@
 import Scene from "./tools/Scene.js";
 import {LoadExample1} from "./examples/loadExample1";
 import {LoadExample2} from "./examples/loadExample2";
+import {LoadExample3} from "./examples/LoadExample3";
 import {RenderThree} from "./render/render_three";
 import {LoadExample3} from "./examples/loadExample3";
 
