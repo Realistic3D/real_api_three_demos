@@ -14,7 +14,6 @@
     request.onload = function() { /*XHR对象获取到返回信息后执行*/
         if (request.status === 200) { /*返回状态为200，即为数据获取成功*/
             let json = JSON.parse(request.responseText);
-            // console.log(json);
             let script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = 'public' + json['/js/index.js'];
@@ -30,9 +29,9 @@
 
 <body>
 <div id="app">
-    <div class="canvas" id="canvas">
-        <canvas id="canvas" ref="canvas" :style="canvasBg"></canvas>
-    </div>
+<!--    <div class="canvas" id="canvas">-->
+<!--        <canvas id="canvas" ref="canvas" :style="canvasBg"></canvas>-->
+<!--    </div>-->
 </div>
 </body>
 </html>

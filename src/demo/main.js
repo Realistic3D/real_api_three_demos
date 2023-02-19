@@ -8,10 +8,10 @@ import {LoadExample4} from "./examples/loadExample4";
 
 export async function Start(canvas) {
     const scene = new Scene(canvas);
-    // await LoadExample1(scene);
+    await LoadExample1(scene);
     // await LoadExample2(scene);
     // await LoadExample3(scene);
-    await LoadExample4(scene);
+    // await LoadExample4(scene);
     await RenderThree(scene);
     return 1;
 }
