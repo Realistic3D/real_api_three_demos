@@ -20,6 +20,9 @@ export async function TestExport(scene, camera) {
         (model) => {
             console.log(model);
         },
+        (e) => {
+            console.log(e)
+        },
         options
     )
 }
