@@ -1,6 +1,5 @@
 import * as REAL from "../real_api/real.three.min";
 import {UpdateServices} from "./render_updates";
-import {TestExport} from "../test/test_export";
 
 
 export async function RenderThree(scene) {
@@ -57,7 +56,7 @@ function getRealAPP() {
         "HDQ8ygWidtm9yosQ270m",
         "0HYZ77ntJpnHxInjtBh3",
         product, {
-            test: true
+            test: false
         }
     );
 }
@@ -73,7 +72,6 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
     // else if(e.key === "1") await DownloadResult(realAPI);
     switch (key) {
         case "Enter":
-            // await TestExport(scene, camera);
             break;
         case "t":
             console.log(camera.position);

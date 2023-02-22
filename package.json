@@ -28,6 +28,7 @@
         "@vant/touch-emulator": "^1.2.0",
         "babel-runtime": "^6.26.0",
         "html2canvas": "^1.4.1",
+        "jszip": "^3.10.1",
         "lazyload": "^2.0.0-rc.2",
         "md5": "^2.2.1",
         "three": "^0.149.0",
