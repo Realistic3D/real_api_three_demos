@@ -14,8 +14,15 @@ const app = new Vue({
             // return { background: "url() #7D7D7D" };
         }
     },
+    data: {
+      is2D: false,
+    },
+    methods: {
+        viewModeClick() {
+            this.is2D = !this.is2D;
+        }
+    },
     async mounted() {
-        console.log("START");
         await Start(this.$refs.canvas)
     }
 })

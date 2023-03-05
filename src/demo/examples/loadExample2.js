@@ -28,13 +28,12 @@ export async function LoadExample2(scene) {
         });
 
         scene.add(base);
-        const target = new THREE.Vector3(30.5, 43.5, -32.5);
+        // const target = new THREE.Vector3(-1.7, 2.4, 0);
+        const target = new THREE.Vector3(-0.485, 2.0, 0);
         camera.position.copy(target);
         scene.controls.target.set(target.x, target.y, target.z + 1);
         // scene.camera.position.z = 5;
         AddLights(scene);
-
-
     }, null, (e) => {
         console.log(e);
     });
