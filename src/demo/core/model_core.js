@@ -15,12 +15,6 @@ export function ShiftPivot(model){
                 if(!allX.includes(p1)) allX.push(p1);
                 if(!allY.includes(p2)) allY.push(p2);
                 if(!allZ.includes(p3)) allZ.push(p3);
-                // if(min.x > p1 || min.x === inf) min.x = p1;
-                // if(min.y > p2 || min.y === inf) min.y = p2;
-                // if(min.z > p3 || min.z === inf) min.z = p3;
-                // if(max.x < p1 || max.x === inf) max.x = p1;
-                // if(max.y < p2 || max.y === inf) max.y = p2;
-                // if(max.z < p3 || max.z === inf) max.z = p3;
             }
         }
     });
@@ -41,6 +35,8 @@ export function ShiftPivot(model){
     if(size.x <= 0.1 && size.y <= 0.1 && size.y <= 0.1) scale = 500;
     else if(size.x >= 50 && size.y >= 50 && size.y >= 50) scale = 0.1;
     else if(size.x <= 1 && size.y <= 1 && size.y <= 1) scale = 10;
+    else if(size.x >= 150 && size.z >= 150) scale = 0.1;
+    else if(size.x >= 70 && size.z >= 70) scale = 0.1;
     else console.error(size)
 
     model.position.set(-center.x, -center.y, -center.z);
