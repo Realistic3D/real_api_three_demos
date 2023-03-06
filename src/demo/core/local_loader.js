@@ -1,5 +1,5 @@
 import {DebugError, DebugSpecial, DebugInfo, SizeMBs} from "./debug_core";
-import {GLTFLocalLoader} from "../local_loaders/gltf_loader";
+import {GLTFLocalLoader} from "../loaders/gltf_buffer_loader";
 
 export async function UploadModel(scene, event) {
     const files = event.target.files;

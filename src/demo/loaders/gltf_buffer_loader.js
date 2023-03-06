@@ -2,6 +2,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {DebugInfo, DebugSpecial} from "../core/debug_core";
 import * as THREE from "three";
 import {ShiftPivot} from "../core/model_core";
+import {AddAxes} from "../core/axes_core";
 
 export async function GLTFLocalLoader(scene, text) {
     const loader = new GLTFLoader();
@@ -18,10 +19,15 @@ export async function GLTFLocalLoader(scene, text) {
 async function LoadScene(scene, mesh) {
     DebugInfo("LOADED");
     const model = GLTFParser(mesh);
-    model.position.y += 2;
+    model.position.x -= 10;
+    model.position.y += 10;
+    model.position.z += 15;
+    // scene.dragObjects.push(model);
+    // scene.ray.hitObjects.push(model);
+    AddAxes(scene, model);
     scene.add(model);
 }
-export function GLTFParser(mesh) {
+export function GLTFParser(mesh, ignorePivot = false) {
     const model = mesh.scene;
     model.traverse((o) => {
         if (o.isMesh) {
@@ -31,5 +37,6 @@ export function GLTFParser(mesh) {
             if(o.material.opacity < 1) o.material.transparent = true;
         }
     });
+    if(ignorePivot) return model;
     return ShiftPivot(model);
 }

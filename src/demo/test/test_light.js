@@ -10,7 +10,9 @@ export function TestLight (scene) {
             v: 99
         }
     }
-    const areaLight = new REAL.AreaLight(scene, 2, 1, config);
+    const width = 2;
+    const height = 2;
+    const areaLight = new REAL.AreaLight(scene, width, height, config);
     areaLight.position.set(0, 1, 0);
     // areaLight.rotation.set(0, Math.PI/2, 0);
     console.log(areaLight);

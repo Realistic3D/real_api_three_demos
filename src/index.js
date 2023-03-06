@@ -1,6 +1,9 @@
 import VueLazyLoad from "vue-lazyload";
 import {Start} from "./demo/main";
-import {LoadLocal, UploadModel} from "./demo/core/local_loader";
+import {UploadModel} from "./demo/core/local_loader";
+import {AddAreaLight} from "./demo/core/arealight_core";
+import {GltfLocalLoader} from "./demo/loaders/gltf_local";
+import {GLTFParser} from "./demo/loaders/gltf_buffer_loader";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -16,13 +19,21 @@ const app = new Vue({
         }
     },
     data: {
-        is2D: false,
         scene: null,
         events: {
             uploadModel: null,
         }
     },
     methods: {
+        async loadAxes() {
+            await GltfLocalLoader("models/gltf/Arrow.glb", async (model) => {
+                const axes = GLTFParser(model, true);
+                axes.name = "REAL_AXES";
+                axes.userData.ID = "REAL_AXES";
+                await Start(this);
+                this.scene.axes = axes;
+            });
+        },
         uploadItem() {
             if(this.events.uploadModel) return;
             this.events.uploadModel = true;
@@ -33,11 +44,12 @@ const app = new Vue({
         addItem() {
 
         },
-        viewModeClick() {
-            this.is2D = !this.is2D;
+        async newAreaLightClick() {
+            await AddAreaLight(this.scene);
         }
     },
     async mounted() {
-        await Start(this);
+        await this.loadAxes();
+        // await Start(this);
     }
 })
