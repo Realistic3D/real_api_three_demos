@@ -1,6 +1,6 @@
 import VueLazyLoad from "vue-lazyload";
 import {Start} from "./demo/main";
-import {LoadLocal} from "./demo/core/local_loader";
+import {LoadLocal, UploadModel} from "./demo/core/local_loader";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -17,17 +17,18 @@ const app = new Vue({
     },
     data: {
         is2D: false,
-        scene: undefined
+        scene: null,
+        events: {
+            uploadModel: null,
+        }
     },
     methods: {
         uploadItem() {
+            if(this.events.uploadModel) return;
+            this.events.uploadModel = true;
             const fileInput = document.getElementById('fileInput');
-            fileInput.addEventListener('change', async (event) => {
-                const files = event.target.files;
-                if(!files.length) return;
-                const file = files[0];
-                await LoadLocal(file);
-            });
+            fileInput.addEventListener('change', async (event) =>
+            {await UploadModel(this.scene, event)});
         },
         addItem() {
 

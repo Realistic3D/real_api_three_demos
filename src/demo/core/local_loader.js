@@ -1,30 +1,46 @@
+import {DebugError, DebugSpecial, DebugInfo, SizeMBs} from "./debug_core";
+import {GLTFLocalLoader} from "../local_loaders/gltf_loader";
 
-export async function LoadLocal(file) {
+export async function UploadModel(scene, event) {
+    const files = event.target.files;
+    if(!files.length) return;
+    const file = files[0];
+    await LoadLocal(scene, file);
+}
+export async function LoadLocal(scene, file) {
     const reader = new FileReader();
     reader.addEventListener(
         'load',
-        (event) => {
-            const size = sizeMBs(file.size);
+        async (event) => {
+            const size = SizeMBs(file.size);
             const nameExt = extractName(file.name);
-            if(nameExt.length !== 2) return;
+            if(nameExt.length !== 2) {
+                DebugError("Error! File type not supported.");
+                return;
+            }
             const name = nameExt[0];
             const ext = nameExt[1];
+            if (!isValidExt(ext)) {
+                DebugError("Error! File type not supported.");
+                return;
+            }
             const text = event.target.result;
             const info = `Name = ${name}, EXT = ${ext}, SIZE = ${size} MBs`;
-            DebugInfo(info);
+            DebugSpecial(info);
+            switch (ext) {
+                case "glb":
+                case "gltf":
+                    await GLTFLocalLoader(scene, text);
+                    break;
+            }
         }
     );
-    reader.readAsText(file);
+    // reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
 }
-function DebugInfo(msg) {
-    // const css = "text-shadow: 1px 1px 2px black, 0 0 1em blue, 0 0 0.2em blue; font-size: 13px;";
-    // color: green, font-weight: bold
-    const css = "text-shadow: 0.3px 0.3px 0.3px black";
-    console.log(`%c${msg}`, css);
-}
-function sizeMBs(byteSize) {
-    const size = byteSize / (1024 * 1024);
-    return size.toFixed(3);
+function isValidExt(ext) {
+    const extension = ext.toString().toLowerCase();
+    return ["stl", "obj", "fbx", "glb", "gltf"].includes(ext);
 }
 function extractName(fileName) {
     const spl = fileName.toString().split(".");
