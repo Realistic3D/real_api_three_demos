@@ -21,6 +21,7 @@ async function LoadRoom(scene, mesh) {
     renderer.toneMappingExposure = 2.3
     renderer.shadowMap.enabled = true;
     renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.setClearColor( 0x000000, 1 );
 
     room.traverse((o) => {
         if (o.isMesh) {

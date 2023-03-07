@@ -1,13 +1,13 @@
 import {DebugError, DebugSpecial, DebugInfo, SizeMBs} from "./debug_core";
 import {GLTFLocalLoader} from "../loaders/gltf_buffer_loader";
 
-export async function UploadModel(scene, event) {
+export async function UploadModel(app, event) {
     const files = event.target.files;
     if(!files.length) return;
     const file = files[0];
-    await LoadLocal(scene, file);
+    await LoadLocal(app, file);
 }
-export async function LoadLocal(scene, file) {
+export async function LoadLocal(app, file) {
     const reader = new FileReader();
     reader.addEventListener(
         'load',
@@ -30,7 +30,7 @@ export async function LoadLocal(scene, file) {
             switch (ext) {
                 case "glb":
                 case "gltf":
-                    await GLTFLocalLoader(scene, text);
+                    await GLTFLocalLoader(app, text);
                     break;
             }
         }

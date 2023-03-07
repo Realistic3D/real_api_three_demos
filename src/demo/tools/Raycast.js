@@ -1,8 +1,10 @@
 import * as THREE from "three";
-import {h} from "vue";
 
 export class Raycast {
-    constructor(scene) {
+    constructor(app) {
+        this.app = app;
+        this.clicked = null;
+        const scene = app.scene;
         this.scene = scene;
         this.camera = scene.camera;
         this.hitObjects = [];
@@ -16,30 +18,25 @@ export class Raycast {
         this.raycaster.setFromCamera( mouse, this.camera );
         const intersects = this.raycaster.intersectObjects( this.hitObjects );
         const hit = getHit(intersects);
-        if(!hit) return;
+        if(!hit) {
+            this.resetHit();
+            return;
+        }
         this.hitOperation(hit);
     }
+    resetHit() {
+        if(!this.clicked) return;
+        this.clicked = null;
+        this.app.toggles.transform = false;
+    }
     hitOperation(hit) {
-        const axes = this.scene.axes;
         const hitObj = hit.object;
-        const parent = hitObj.parent;
-        hitObj.attach(axes);
-        const size = hitObj.userData.size;
-        axes.position.set(size.x/2, -size.y/2, size.z/2);
-        // axes.position.copy(hitObj.userData.size);
-        console.log(axes)
-        // const children = axes.children;
-        // for (const child of children) {
-        //     if(child.name.startsWith("Pivot")) continue;
-        //     if(child.name === "REAL_PIVOT") continue;
-        //     axes.remove(child);
-        // }
-        // const parent = hitObj.parent;
-        // console.log(parent, axes)
-        // axes.position.copy(hitObj.position);
-        // parent.add(axes);
-        // axes.attach(hitObj);
-        // this.scene.dragObjects.push(axes);
+        this.clicked = hitObj;
+        const transform = this.app.transform;
+        transform.scale = new THREE.Vector3().copy(hitObj.scale);
+        transform.position = new THREE.Vector3().copy(hitObj.position);
+        transform.rotation = new THREE.Vector3(hitObj.rotation.x, hitObj.rotation.y, hitObj.rotation.z);
+        this.app.toggles.transform = true;
     }
 }
 function removeAxes() {

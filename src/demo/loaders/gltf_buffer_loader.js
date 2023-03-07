@@ -4,26 +4,27 @@ import * as THREE from "three";
 import {ShiftPivot} from "../core/model_core";
 import {AddAxes} from "../core/axes_core";
 
-export async function GLTFLocalLoader(scene, text) {
+export async function GLTFLocalLoader(app, text) {
     const loader = new GLTFLoader();
     loader.parse(
         text, '',
         // called when the resource is loaded
-        async ( gltf ) => { await LoadScene(scene, gltf); },
+        async ( gltf ) => { await LoadScene(app, gltf); },
         function ( error ) {console.log( 'An error happened' );},
         function ( xhr ) {
             DebugSpecial( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
         },
     );
 }
-async function LoadScene(scene, mesh) {
+async function LoadScene(app, mesh) {
+    const scene = app.scene;
     DebugInfo("LOADED");
     const model = GLTFParser(mesh);
     model.position.x -= 10;
     model.position.y += 10;
     model.position.z += 15;
     // scene.dragObjects.push(model);
-    // scene.ray.hitObjects.push(model);
+    app.ray.hitObjects.push(model);
     AddAxes(scene, model);
     scene.add(model);
 }

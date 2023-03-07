@@ -72,9 +72,9 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
     // if(e.key === "Enter") await ExportClick(realAPI);
     // else if(e.key === "1") await DownloadResult(realAPI);
     switch (key) {
-        case "Enter":
-            TestLight(scene);
-            break;
+        // case "Enter":
+        //     TestLight(scene);
+        //     break;
         case "t":
             console.log(camera.position);
             console.log(camera);

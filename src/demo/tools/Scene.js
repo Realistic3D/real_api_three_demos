@@ -18,7 +18,7 @@ export default class Scene{
         this.sun = new THREE.DirectionalLight(0xffffff, 1);
         this.drag = new DragControls( this.dragObjects, this.camera, this.renderer.domElement );
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.ray = new Raycast(this);
+        // this.ray = new Raycast(this);
         this.setScene();
         this.render();
         this.setControl();
