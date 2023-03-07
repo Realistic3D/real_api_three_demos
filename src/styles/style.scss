@@ -27,6 +27,35 @@
   width: 50%;
   background-color: azure;
 }
+.Render {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  width: 150px;
+  height: 40px;
+  background-color: whitesmoke;
+  overflow: scroll
+}
+.Info {
+  position: absolute;
+  left: 10px;
+  top: 50px;
+  width: 150px;
+  height: 40px;
+  background-color: whitesmoke;
+}
+.Login {
+  position: absolute;
+  left: 10px;
+  top: 50px;
+  width: 500px;
+  height: 250px;
+  background-color: whitesmoke;
+}
+.Login_input {
+  margin-top:1%;
+  width: 150px;
+}
 .label {
   margin-left: 8%;
 }

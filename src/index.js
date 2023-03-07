@@ -7,6 +7,7 @@ import {GLTFParser} from "./demo/loaders/gltf_buffer_loader";
 import {Raycast} from "./demo/tools/Raycast";
 import {DebugError} from "./demo/core/debug_core";
 import {DegreeRadians} from "./demo/core/math_core";
+import {Render} from "./demo/tools/Render";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -24,19 +25,41 @@ const app = new Vue({
     data: {
         ray: null,
         scene: null,
+        render: null,
+        login: {
+            appKey: null,
+            userName: null,
+            appSecret: null,
+            product: {
+                insID: 0,
+                prodKey: null,
+                prodName: null,
+            },
+            status: ""
+        },
+        user: {
+            isLoggedIn: false,
+        },
         transform: {
           scale: {x: 1, y: 1, z: 1},
           position: {x: 0, y: 0, z: 0},
           rotation: {x: 0, y: 0, z: 0},
         },
         toggles: {
-            transform: false
+            info: false,
+            transform: false,
         },
         events: {
             uploadModel: null,
         }
     },
     methods: {
+        loadCache() {
+            const loginCache = localStorage['login'] || undefined;
+            if(loginCache) {
+                this.login = JSON.parse(loginCache);
+            }
+        },
         async loadAxes() {
             await GltfLocalLoader("models/gltf/Arrow.glb", async (model) => {
                 const axes = GLTFParser(model, true);
@@ -54,11 +77,37 @@ const app = new Vue({
             fileInput.addEventListener('change', async (event) =>
             {await UploadModel(this, event)});
         },
-        addItem() {
-
-        },
         async newAreaLightClick() {
             await AddAreaLight(this);
+        },
+        async loginUpdate(e) {
+            const form = e.target.form;
+            for (const element of form) {
+                const type = element.id;
+                const value = element.value;
+                switch (type) {
+                    case "un":
+                        this.login.userName = value;
+                        break;
+                    case "ak":
+                        this.login.appKey = value;
+                        break;
+                    case "as":
+                        this.login.appSecret = value;
+                        break;
+                    case "lpn":
+                        this.login.product.prodName = value;
+                        break;
+                    case "lpk":
+                        this.login.product.prodKey = value;
+                        break;
+                    case "lpid":
+                        this.login.product.insID = value;
+                        break;
+                }
+            }
+            this.render.info = "Logging in....";
+            await this.render.login(this.login);
         },
         transformUpdated(evt, type) {
             const value = evt.target.value;
@@ -103,6 +152,8 @@ const app = new Vue({
         }
     },
     async mounted() {
+        this.loadCache();
+        this.render = new Render(this);
         await this.loadAxes();
         // await Start(this);
     }

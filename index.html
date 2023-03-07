@@ -36,22 +36,56 @@
         <form class="Transform" v-if="toggles.transform">
             <br>
             <label class="label" for="Position">Position:</label>
-            <input class="label_input" type="number" id="Position" name="x" :value="transform.position.x" @change="(e) => {transformUpdated(e, 'px')}">
-            <input class="label_input" type="number" id="Position" name="y" :value="transform.position.y" @change="(e) => {transformUpdated(e, 'py')}">
-            <input class="label_input" type="number" id="Position" name="z" :value="transform.position.z" @change="(e) => {transformUpdated(e, 'pz')}">
+            <input class="label_input" type="number" id="px" name="x" :value="transform.position.x" @change="(e) => {transformUpdated(e, 'px')}">
+            <input class="label_input" type="number" id="py" name="y" :value="transform.position.y" @change="(e) => {transformUpdated(e, 'py')}">
+            <input class="label_input" type="number" id="pz" name="z" :value="transform.position.z" @change="(e) => {transformUpdated(e, 'pz')}">
             <br>
             <label class="label" for="Rotation">Rotation:</label>
-            <input class="label_input" type="number" id="Rotation" name="x" :value="transform.rotation.x" @change="(e) => {transformUpdated(e, 'rx')}">
-            <input class="label_input" type="number" id="Rotation" name="y" :value="transform.rotation.y" @change="(e) => {transformUpdated(e, 'ry')}">
-            <input class="label_input" type="number" id="Rotation" name="z" :value="transform.rotation.z" @change="(e) => {transformUpdated(e, 'rz')}">
+            <input class="label_input" type="number" id="rx" name="x" :value="transform.rotation.x" @change="(e) => {transformUpdated(e, 'rx')}">
+            <input class="label_input" type="number" id="ry" name="y" :value="transform.rotation.y" @change="(e) => {transformUpdated(e, 'ry')}">
+            <input class="label_input" type="number" id="rz" name="z" :value="transform.rotation.z" @change="(e) => {transformUpdated(e, 'rz')}">
             <br>
             <label class="label" for="Scale">Scale:</label>
-            <input class="label_input" type="number" id="Scale" name="x" :value="transform.scale.x" @change="(e) => {transformUpdated(e, 'sx')}">
-            <input class="label_input" type="number" id="Scale" name="y" :value="transform.scale.y" @change="(e) => {transformUpdated(e, 'sy')}">
-            <input class="label_input" type="number" id="Scale" name="z" :value="transform.scale.z" @change="(e) => {transformUpdated(e, 'sz')}">
+            <input class="label_input" type="number" id="sx" name="x" :value="transform.scale.x" @change="(e) => {transformUpdated(e, 'sx')}">
+            <input class="label_input" type="number" id="sy" name="y" :value="transform.scale.y" @change="(e) => {transformUpdated(e, 'sy')}">
+            <input class="label_input" type="number" id="sz" name="z" :value="transform.scale.z" @change="(e) => {transformUpdated(e, 'sz')}">
             <br>
             <input class="cnt_btn" type="button" value="Change" @click="transformClicked">
+            <br>
         </form>
+
+        <form class="Login" v-if="!user.isLoggedIn && !toggles.info">
+            <br>
+            <label class="label" for="Username">Username:</label>
+            <input class="Login_input" type="text" id="un" name="x" :value="login.userName">
+            <br>
+            <label class="label" for="AppKey">AppKey:</label>
+            <input class="Login_input" type="password" id="ak" name="x" :value="login.appKey">
+            <br>
+            <label class="label" for="AppSecrets">AppSecrets:</label>
+            <input class="Login_input" type="password" id="as" name="x" :value="login.appSecret">
+            <br>
+            <label class="label" for="ProductName">ProductName:</label>
+            <input class="Login_input" type="text" id="lpn" name="x" :value="login.product.prodName">
+            <br>
+            <label class="label" for="ProductKey">ProductKey:</label>
+            <input class="Login_input" type="password" id="lpk" name="x" :value="login.product.prodKey">
+            <br>
+            <label class="label" for="InstanceID">InstanceID:</label>
+            <input class="Login_input" type="number" id="lpid" name="x" :value="login.product.insID">
+            <br>
+
+            <br>
+            <input class="cnt_btn" type="button" value="Login" @click="loginUpdate">
+            <label class="Login_input" id="render_info" v-if="render">{{render.info}}</label>
+            <br>
+        </form>
+
+        <input class="Info" v-if="render && toggles.info" :value="render.info"/>
+
+        <select class="Render"  id="render_jobs">
+            <option>Render results</option>
+        </select >
     </div>
 <!--    <div class="canvas" id="canvas">-->
 <!--        <canvas id="canvas" ref="canvas" :style="canvasBg"></canvas>-->
