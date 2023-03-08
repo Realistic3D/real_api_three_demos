@@ -25,7 +25,7 @@ async function LoadScene(app, mesh) {
     model.position.z += 15;
     // scene.dragObjects.push(model);
     app.ray.hitObjects.push(model);
-    AddAxes(scene, model);
+    // AddAxes(scene, model);
     scene.add(model);
 }
 export function GLTFParser(mesh, ignorePivot = false) {

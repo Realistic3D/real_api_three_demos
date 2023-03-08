@@ -81,6 +81,9 @@
             <br>
         </form>
 
+        <button v-if="toggles.render" class="btn btn-light btn-block" @click="renderClicked">RENDER NOW</button>
+        <button v-if="toggles.showResult" class="btn btn-light btn-block" @click="renderResultClicked">Show {{events.renderResult ? "Original" : "Rendered"}}</button>
+
         <input class="Info" v-if="render && toggles.info" :value="render.info"/>
 
         <select class="Render"  id="render_jobs">

@@ -1,13 +1,11 @@
 import * as REAL from "../real_api/real.three.min";
-import {UpdateServices} from "../render/render_updates";
 import {DebugError} from "../core/debug_core";
-import {LoginUser} from "../render/render_three";
 import {EnumString, Status} from "../real_api/real.three.min";
 
 export class Render {
     constructor(app) {
         this.app = app;
-        this.realApi = null;
+        this.realApp = null;
         this.info = "";
         this.jobs = [];
     }
@@ -19,7 +17,7 @@ export class Render {
             pData.prodKey,
             pData.insID
         );
-        this.realApi = new REAL.RealAPI(
+        this.realApp = new REAL.RealAPI(
             lData.userName,
             lData.appKey,
             lData.appSecret,
@@ -31,7 +29,7 @@ export class Render {
         await this.loginUser();
     }
     async loginUser() {
-        const login = await REAL.LoginRealAPI(this.realApi, this.updateServices.bind(this), ErrorLogin);
+        const login = await REAL.LoginRealAPI(this.realApp, this.updateServices.bind(this), ErrorLogin);
         switch(login) {
             case REAL.LoginStatus.SUCCESS:
                 // console.log("Login request sent");
@@ -47,7 +45,7 @@ export class Render {
                 break;
         }
     }
-    async updateServices(userResponse, realAPI) {
+    async updateServices(userResponse) {
         const msg = userResponse.msg;
         const data = userResponse.data;
         const type = userResponse.type;
@@ -57,17 +55,59 @@ export class Render {
                 this.app.toggles.info = true;
                 this.app.user.isLoggedIn = true;
                 this.jobs = data;
-                this.createJobList();
+                this.loginSuccess();
                 break;
             case Status.LoginFailed:
                 this.app.toggles.info = false;
                 this.info = "Login failed";
+                break;
+            case Status.NewJob:
+                console.log(data);
+                if(msg !== "SUCCESS") {
+                    this.info = "Exporting failed";
+                    return;
+                }
+                this.info = "EXPORTED";
+                break;
+            case Status.Upload:
+                this.info = "Upload";
+                console.log(userResponse);
                 break;
             default:
                 this.info = msg;
                 return;
         }
         // console.error(EnumString(type), type, msg);
+    }
+    loginSuccess() {
+        this.createJobList();
+        this.app.toggles.render = true;
+    }
+    async newJob() {
+        if(!this.realApp.isLoggedIn) {
+            this.info = "Please login first";
+            return;
+        }
+        const scene = this.app.scene.scene;
+        const camera = this.app.scene.camera;
+
+        showPivot(scene, false);
+        const exp = await REAL.RenderScene(this.realApp, scene, camera);
+        switch (exp) {
+            case REAL.ConvertStatus.SUCCESS:
+                this.info = "Exporting success";
+                break;
+            case REAL.ConvertStatus.FAILED:
+                this.info = "Exporting failed";
+                break;
+            case REAL.ConvertStatus.NOT_LOGGED:
+                this.info = "Please login first";
+                break;
+            case REAL.ConvertStatus.ALREADY:
+                this.info = "Already exporting";
+                break;
+        }
+        showPivot(scene);
     }
     createJobList() {
         let select  = document.getElementById("render_jobs");
@@ -80,6 +120,11 @@ export class Render {
             select.appendChild(el);
         })
     }
+}
+function showPivot(scene, visible = true) {
+    scene.traverse((child) => {
+        if(child.name === "REAL_PIVOT") child.visible = true;
+    });
 }
 function ErrorLogin() {
     DebugError("There is problem with login");

@@ -14,8 +14,10 @@ export async function AddAreaLight(app) {
     }
     const width = 1;
     const height = 1;
-    const light = new AreaLight(scene, width, height, config, false);
-    light.position.set(0, 20, 0);
+    const light = new AreaLight(scene, width, height, config);
+    light.position.set(0, 15, 35);
+    light.rotation.set(Math.PI/2, 0, 0);
+    light.scale.set(30, 1, 20);
     app.ray.hitObjects.push(light.mesh);
     // light.mesh.userData.size = new THREE.Vector3(width, 0, height);
     // AddAxes(scene, light.mesh)
