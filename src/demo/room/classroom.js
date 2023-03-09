@@ -1,16 +1,19 @@
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 
-export async function ClassRoom(scene) {
+export async function ClassRoom(app) {
     const model = "./models/gltf/rooms/LivingRoom.glb";
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(model,
-        async (mesh)=> {await LoadRoom(scene, mesh)},
-        async (data) => {await Progress(scene, data)},
+        async (mesh)=> {await LoadRoom(app, mesh)},
+        async (data) => {await Progress(app, data)},
         (e) => {Error(e)
     });
 }
-async function LoadRoom(scene, mesh) {
+async function LoadRoom(app, mesh) {
+    app.events.loadingBar = false;
+
+    const scene = app.scene;
     const renderer = scene.renderer;
     const room = mesh.scene;
     const scale = 10;
@@ -48,9 +51,10 @@ function AddLights(scene) {
     light.castShadow = true;
     scene.add( light );
 }
-async function Progress(scene, data) {
+async function Progress(app, data) {
     const fact = 100;
     const loaded = data.loaded / data.total * fact;
+    app.loadingBar(loaded);
     console.log(loaded);
 }
 function Error(error) {

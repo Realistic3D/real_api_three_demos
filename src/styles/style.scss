@@ -13,6 +13,25 @@
     height: 100% !important;
   }
 }
+#myProgress {
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  height: 30px;
+  background-color: grey;
+}
+#myBar {
+  position: absolute;
+  width: 1%;
+  height: 30px;
+  bottom: 0;
+  background-color: green;
+}
+.loading_text {
+  position: fixed;
+  top: 50.5%;
+  left: 40%;
+}
 .UI {
   //background-color: azure;
   position: absolute;

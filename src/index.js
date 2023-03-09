@@ -46,6 +46,7 @@ const app = new Vue({
           position: {x: 0, y: 0, z: 0},
           rotation: {x: 0, y: 0, z: 0},
         },
+        progressValue: 50,
         toggles: {
             info: false,
             render: false,
@@ -53,11 +54,18 @@ const app = new Vue({
             showResult: false,
         },
         events: {
+            loadingBar: true,
             uploadModel: null,
             renderResult: false,
         }
     },
     methods: {
+        loadingBar(progress) {
+            const elem = document.getElementById("myBar");
+            if(!elem) return;
+            this.progressValue = progress;
+            elem.style.width =  `${progress}%`;
+        },
         loadCache() {
             const loginCache = localStorage['login'] || undefined;
             if(loginCache) {
@@ -161,6 +169,7 @@ const app = new Vue({
             this.toggles.transform = false;
         },
         test() {
+            this.loadingBar();
             // const data = {"portal":false,"intensity":20,"beamAngle":180,"color":{"h":52,"s":100,"v":99},"castShadow":true,"shadowCaustics":false,"multipleImportance":true};
             // let properties = this.bindKeys(data);
             // console.error(properties)
@@ -181,7 +190,9 @@ const app = new Vue({
     async mounted() {
         this.loadCache();
         this.render = new Render(this);
-        await this.loadAxes();
+        await Start(this);
+        this.ray = new Raycast(this);
+        // await this.loadAxes();
         // await Start(this);
         this.test();
     },
