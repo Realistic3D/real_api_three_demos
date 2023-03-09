@@ -8,7 +8,6 @@ import {Raycast} from "./demo/tools/Raycast";
 import {DebugError} from "./demo/core/debug_core";
 import {DegreeRadians} from "./demo/core/math_core";
 import {Render} from "./demo/tools/Render";
-import {value} from "lodash/seq";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -169,23 +168,7 @@ const app = new Vue({
             this.toggles.transform = false;
         },
         test() {
-            this.loadingBar();
-            // const data = {"portal":false,"intensity":20,"beamAngle":180,"color":{"h":52,"s":100,"v":99},"castShadow":true,"shadowCaustics":false,"multipleImportance":true};
-            // let properties = this.bindKeys(data);
-            // console.error(properties)
-
         },
-        bindKeys(item) {
-            let properties = "REAL_AREA_LIGHT_!";
-            for (const key in item) {
-                let value = item[key];
-                if(typeof value === "object") value = this.bindKeys(value);
-                properties += `|${key}_${value}`;
-                console.log(key, value, typeof value)
-            }
-            properties += "!";
-            return properties;
-        }
     },
     async mounted() {
         this.loadCache();

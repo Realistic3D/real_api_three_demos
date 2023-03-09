@@ -54,3 +54,9 @@ export function GetPivot(size) {
     mesh.name = "REAL_PIVOT";
     return mesh;
 }
+
+export function Box() {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial();
+    return new THREE.Mesh(geometry, material);
+}
