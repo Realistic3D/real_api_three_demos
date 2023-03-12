@@ -13,6 +13,25 @@
     height: 100% !important;
   }
 }
+///* Horizontal */
+//.section {
+//  display: flex;
+//  overflow-x: auto;
+//  scroll-snap-type: x;
+//}
+/* Vertical */
+.section {
+  position: absolute;
+  right: 15px;
+  width: 350px;
+  height: 250px;
+  overflow-y: auto;
+  scroll-snap-type: y;
+  background-color: whitesmoke;
+}
+.section_item {
+  scroll-snap-align: start;
+}
 #myProgress {
   position: fixed;
   top: 50%;

@@ -22,7 +22,7 @@ export class Render {
             lData.appKey,
             lData.appSecret,
             product, {
-                test: false
+                test: true
             }
         );
         localStorage['login'] = JSON.stringify(login);
@@ -54,7 +54,9 @@ export class Render {
                 this.info = "Login success";
                 this.app.toggles.info = true;
                 this.app.user.isLoggedIn = true;
-                this.jobs = data;
+                for (const datum of data) {
+                    this.jobs.push(datum)
+                }
                 this.loginSuccess();
                 break;
             case Status.LoginFailed:
@@ -62,16 +64,30 @@ export class Render {
                 this.info = "Login failed";
                 break;
             case Status.NewJob:
-                console.log(data);
                 if(msg !== "SUCCESS") {
                     this.info = "Exporting failed";
                     return;
                 }
+                this.updateJob(data);
                 this.info = "EXPORTED";
                 break;
+            case Status.JobStatus:
+                if(msg !== "SUCCESS") return;
+                const jobInfo = data;
+                for (const job of this.jobs) {
+                    if(job.jobID !== jobInfo.jobID) continue;
+                    job.status = jobInfo.status;
+                    CreateJobList(this.jobs);
+                    break;
+                }
+                break;
             case Status.Upload:
-                this.info = "Upload";
-                console.log(userResponse);
+                if(msg === "SUCCESS") {
+                    this.info = "Uploading success";
+                    const job = {jobID: data, status: "QUEUED"};
+                    this.updateJob(job);
+                }
+                else this.info = `Uploading failed! ${msg}`;
                 break;
             default:
                 this.info = msg;
@@ -79,8 +95,20 @@ export class Render {
         }
         // console.error(EnumString(type), type, msg);
     }
+    updateJob(job) {
+        let have = false;
+        for (const curJob of this.jobs) {
+            if(curJob.jobID === job.jobID) {
+                have = true;
+                curJob.status = job.status;
+                break;
+            }
+        }
+        if(!have) this.jobs.push(job);
+        CreateJobList(this.jobs);
+    }
     loginSuccess() {
-        this.createJobList();
+        CreateJobList(this.jobs);
         this.app.toggles.render = true;
     }
     async newJob() {
@@ -109,17 +137,28 @@ export class Render {
         }
         showPivot(scene);
     }
-    createJobList() {
-        let select  = document.getElementById("render_jobs");
-        this.jobs.forEach((item)=>{
-            const jobID = item.jobID;
-            const status = item.status;
-            let el = document.createElement("option");
-            el.textContent = jobID;
-            el.value = status;
-            select.appendChild(el);
-        })
+}
+export function CreateJobList(jobs) {
+    let section  = document.getElementById("render_jobs");
+    while (section.firstChild) {
+        section.removeChild(section.lastChild);
     }
+    jobs.forEach((job)=>{
+        let el = document.createElement("div");
+        el.className = "section_item";
+        el.innerHTML  = setResultHTML(job);
+        section.appendChild(el);
+    })
+}
+function setResultHTML(job) {
+    const jobID = job.jobID;
+    const status = job.status;
+    let html = "<br>";
+    html += `JOB ID: ${jobID}`;
+    html += "<br>";
+    html += `JOB STATUS: ${status}`;
+    html += "<br>";
+    return html;
 }
 function showPivot(scene, visible = true) {
     scene.traverse((child) => {

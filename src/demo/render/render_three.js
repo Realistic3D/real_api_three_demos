@@ -1,6 +1,7 @@
 import * as REAL from "../real_api/real.three.min";
 import {UpdateServices} from "./render_updates";
 import {TestLight} from "../test/test_light";
+import {CreateJobList} from "../tools/Render";
 
 
 export async function RenderThree(scene) {
@@ -72,24 +73,14 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
     // if(e.key === "Enter") await ExportClick(realAPI);
     // else if(e.key === "1") await DownloadResult(realAPI);
     switch (key) {
-        // case "Enter":
-        //     TestLight(scene);
-        //     break;
+        case "Enter":
+            const test = [{jobID: "test", status: "TEST"}]
+            CreateJobList(test);
+            break;
         case "t":
             console.log(camera.position);
             console.log(camera);
             break;
-        case "l":
-            // console.log("Login");
-            await LoginUser(realAPI);
-            break;
-        case "e":
-            await RenderScene(realAPI, scene, camera)
-            break;
-        //     case "n":
-        //         console.log("Creating new job");
-        //         await realAPI.askService(Status.NewJob)
-        //         break;
     }
 }
 function ErrorLogin() {
