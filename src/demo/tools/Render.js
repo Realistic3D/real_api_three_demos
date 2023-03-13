@@ -83,11 +83,11 @@ export class Render {
                 break;
             case Status.Upload:
                 if(msg === "SUCCESS") {
-                    this.info = "Uploading success";
+                    this.info = "Registering success";
                     const job = {jobID: data, status: "QUEUED"};
                     this.updateJob(job);
                 }
-                else this.info = `Uploading failed! ${msg}`;
+                else this.info = `Registering failed! ${msg}`;
                 break;
             default:
                 this.info = msg;
@@ -119,7 +119,7 @@ export class Render {
         const scene = this.app.scene.scene;
         const camera = this.app.scene.camera;
 
-        showPivot(scene, false);
+        ShowPivot(scene, false);
         const exp = await REAL.RenderScene(this.realApp, scene, camera);
         switch (exp) {
             case REAL.ConvertStatus.SUCCESS:
@@ -135,7 +135,7 @@ export class Render {
                 this.info = "Already exporting";
                 break;
         }
-        showPivot(scene);
+        ShowPivot(scene);
     }
 }
 export function CreateJobList(jobs) {
@@ -160,9 +160,9 @@ function setResultHTML(job) {
     html += "<br>";
     return html;
 }
-function showPivot(scene, visible = true) {
+export function ShowPivot(scene, visible = true) {
     scene.traverse((child) => {
-        if(child.name === "REAL_PIVOT") child.visible = true;
+        if(child.name === "REAL_PIVOT") child.material.opacity = visible ? child.material.userData.opacity: 0;
     });
 }
 function ErrorLogin() {

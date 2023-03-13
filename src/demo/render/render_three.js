@@ -2,6 +2,7 @@ import * as REAL from "../real_api/real.three.min";
 import {UpdateServices} from "./render_updates";
 import {TestLight} from "../test/test_light";
 import {CreateJobList} from "../tools/Render";
+import {TestExport} from "../test/test_export";
 
 
 export async function RenderThree(scene) {
@@ -74,8 +75,7 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
     // else if(e.key === "1") await DownloadResult(realAPI);
     switch (key) {
         case "Enter":
-            const test = [{jobID: "test", status: "TEST"}]
-            CreateJobList(test);
+            await TestExport(scene, camera);
             break;
         case "t":
             console.log(camera.position);

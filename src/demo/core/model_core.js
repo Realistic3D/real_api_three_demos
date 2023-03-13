@@ -40,16 +40,17 @@ export function ShiftPivot(model){
     else console.error(size)
 
     model.position.set(-center.x, -center.y, -center.z);
-    const pivot = GetPivot(size, 1);
+    const pivot = GetPivot(size);
     pivot.scale.set(scale, scale, scale);
     pivot.add(model);
     pivot.userData.size = size;
     return pivot;
 }
 
-export function GetPivot(size) {
+export function GetPivot(size, opacity = 0.1) {
     const geometry = new THREE.BoxGeometry(size.x, size.y, size.z);
-    const material = new THREE.MeshPhongMaterial({opacity: 0.1, transparent: true});
+    const material = new THREE.MeshBasicMaterial({opacity: opacity, transparent: true});
+    material.userData.opacity = opacity;
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = "REAL_PIVOT";
     return mesh;
