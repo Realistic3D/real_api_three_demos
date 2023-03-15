@@ -59,12 +59,13 @@ export default class Scene{
         this.renderer.shadowMap.needsUpdate = true;
 
         const lightTarget = new THREE.Group();
+        lightTarget.name = "LightTarget";
         lightTarget.position.set(0,0,-1);
-        this.sun.add(lightTarget);
         this.sun.target = lightTarget;
 
-        this.sun.position.y += 10;
-        this.sun.position.z += 10;
+        this.sun.position.y += 100;
+        this.sun.position.z += 100;
+        this.sun.attach(lightTarget);
 
         this.scene.add(this.sun);
         // this.scene.add(this.ambient);

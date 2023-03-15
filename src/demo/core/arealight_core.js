@@ -6,11 +6,7 @@ export async function AddAreaLight(app) {
     const scene = app.scene;
     const config = {
         intensity: 20,
-        color: {
-            h: 52,
-            s: 100,
-            v: 99
-        }
+        color: "FFDA7A"
     }
     const width = 1;
     const height = 1;

@@ -119,7 +119,22 @@ export class Render {
         const scene = this.app.scene.scene;
         const camera = this.app.scene.camera;
 
-        ShowPivot(scene, false);
+        const pivots = [];
+        scene.traverse((child) => {
+            if(child.name === "REAL_PIVOT") {
+                const parent = child.parent;
+                const children = child.children;
+                pivots.push({
+                    pivot: child,
+                    children: children
+                })
+                for (const child1 of children) {
+                    parent.attach(child1);
+                }
+                parent.remove(child);
+            }
+        });
+
         const exp = await REAL.RenderScene(this.realApp, scene, camera);
         switch (exp) {
             case REAL.ConvertStatus.SUCCESS:
