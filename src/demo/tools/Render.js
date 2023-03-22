@@ -77,14 +77,14 @@ export class Render {
                 for (const job of this.jobs) {
                     if(job.jobID !== jobInfo.jobID) continue;
                     job.status = jobInfo.status;
-                    CreateJobList(this.jobs);
+                    this.updateJob(job);
                     break;
                 }
                 break;
             case Status.Upload:
                 if(msg === "SUCCESS") {
                     this.info = "Registering success";
-                    const job = {jobID: data, status: "QUEUED"};
+                    const job = {jobID: data, status: "UPLOADED"};
                     this.updateJob(job);
                 }
                 else this.info = `Registering failed! ${msg}`;
