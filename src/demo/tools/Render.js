@@ -72,11 +72,12 @@ export class Render {
                 this.info = "EXPORTED";
                 break;
             case Status.JobStatus:
-                if(msg !== "SUCCESS") return;
+                if(!data) return;
                 const jobInfo = data;
                 for (const job of this.jobs) {
                     if(job.jobID !== jobInfo.jobID) continue;
                     job.status = jobInfo.status;
+                    if(job.status === "COMPLETED") console.log(msg);
                     this.updateJob(job);
                     break;
                 }
@@ -105,10 +106,10 @@ export class Render {
             }
         }
         if(!have) this.jobs.push(job);
-        CreateJobList(this.jobs);
+        CreateJobList(this.jobs, this.app);
     }
     loginSuccess() {
-        CreateJobList(this.jobs);
+        CreateJobList(this.jobs, this.app);
         this.app.toggles.render = true;
     }
     async newJob() {
@@ -153,27 +154,64 @@ export class Render {
         ShowPivot(scene);
     }
 }
-export function CreateJobList(jobs) {
+export function CreateJobList(jobs, app) {
     let section  = document.getElementById("render_jobs");
     while (section.firstChild) {
         section.removeChild(section.lastChild);
     }
-    jobs.forEach((job)=>{
+    jobs.forEach(async (job)=>{
         let el = document.createElement("div");
         el.className = "section_item";
-        el.innerHTML  = setResultHTML(job);
-        section.appendChild(el);
+        await setResultHTML(section, el, job, app);
+        // section.appendChild(el);
     })
 }
-function setResultHTML(job) {
+async function setResultHTML(section, el, job, app) {
     const jobID = job.jobID;
     const status = job.status;
+    const url = status === "COMPLETED" ? `https://rest.real-api.online/rapi/${jobID}.jpg` : undefined;
     let html = "<br>";
     html += `JOB ID: ${jobID}`;
     html += "<br>";
     html += `JOB STATUS: ${status}`;
     html += "<br>";
-    return html;
+    if(!url) {
+        el.innerHTML = html;
+        section.appendChild(el);
+        return
+    }
+    //  @click="ShowResult(${url})"
+    html += `<button class="btn btn-light btn-block" id="${jobID}">View</button>`;
+    el.innerHTML = html;
+    section.appendChild(el);
+
+    const button = document.getElementById(jobID);
+    // console.log(button)
+    button.onclick = async () => { await ShowResult(url, app);}
+}
+export async function ShowResult(url, app) {
+
+    const section = document.getElementById("render_result");
+    for (const child of section.childNodes) {
+        if(child.id !== "render_img") continue;
+        const canvas = app.scene.renderer.domElement;
+        app.show.url = url;
+        app.show.img = child;
+        child.width = canvas.width;
+        child.height = canvas.height;
+        child.src = url;
+        if(!app.events.imgResize) {
+            window.addEventListener('resize', ()=> {onWindowResize(canvas, child)}, false);
+            app.events.imgResize = true;
+        }
+        break;
+    }
+    app.toggles.showResult = true;
+    app.events.renderResult = true;
+}
+function onWindowResize(canvas, child) {
+    child.width = canvas.width;
+    child.height = canvas.height;
 }
 export function ShowPivot(scene, visible = true) {
     scene.traverse((child) => {

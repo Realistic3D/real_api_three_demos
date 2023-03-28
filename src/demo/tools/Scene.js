@@ -11,6 +11,7 @@ export default class Scene{
         const far = 10000;
         this.dragObjects = [];
         this.axes = null;
+        this.canvas = canvas;
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, near, far);
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, canvas: canvas});

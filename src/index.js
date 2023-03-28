@@ -46,6 +46,10 @@ const app = new Vue({
           rotation: {x: 0, y: 0, z: 0},
         },
         progressValue: 50,
+        show: {
+          url: "",
+          img: null,
+        },
         toggles: {
             info: false,
             render: false,
@@ -54,6 +58,7 @@ const app = new Vue({
         },
         events: {
             loadingBar: true,
+            imgResize: false,
             uploadModel: null,
             renderResult: false,
         }
@@ -96,6 +101,15 @@ const app = new Vue({
         },
         async renderResultClicked() {
             this.events.renderResult = !this.events.renderResult;
+            if(this.events.renderResult) this.show.img.src = this.show.url;
+            else this.show.img.src = "";
+        },
+        async renderResultCloseClicked() {
+            this.show.img.width = 1;
+            this.show.img.height = 1;
+            this.show = { url: "", img: null};
+            app.toggles.showResult = false;
+            app.events.renderResult = false;
         },
         async loginUpdate(e) {
             const form = e.target.form;
