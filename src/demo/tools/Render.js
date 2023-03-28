@@ -22,7 +22,7 @@ export class Render {
             lData.appKey,
             lData.appSecret,
             product, {
-                test: true
+                test: false
             }
         );
         localStorage['login'] = JSON.stringify(login);
