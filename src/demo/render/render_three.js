@@ -77,10 +77,10 @@ async function OnKeyEnter(e, scene, camera, realAPI) {
         // case "Enter":
         //     await TestExport(scene, camera);
         //     break;
-        // case "t":
-        //     console.log(camera.position);
-        //     console.log(camera);
-        //     break;
+        case "t":
+            console.log(camera.position);
+            console.log(camera);
+            break;
     }
 }
 function ErrorLogin() {

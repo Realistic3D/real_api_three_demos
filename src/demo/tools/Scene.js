@@ -35,8 +35,8 @@ export default class Scene{
             RIGHT: THREE.MOUSE.PAN
         }
         controls.keys = {
-            LEFT: 'ArrowLeft', //left arrow
             UP: 'ArrowUp', // up arrow
+            LEFT: 'ArrowLeft', //left arrow
             RIGHT: 'ArrowRight', // right arrow
             BOTTOM: 'ArrowDown' // down arrow
         }
@@ -61,12 +61,13 @@ export default class Scene{
 
         const lightTarget = new THREE.Group();
         lightTarget.name = "LightTarget";
+        this.sun.add(lightTarget);
         lightTarget.position.set(0,0,-1);
         this.sun.target = lightTarget;
 
         this.sun.position.y += 100;
         this.sun.position.z += 100;
-        this.sun.attach(lightTarget);
+        // this.sun.attach(lightTarget);
 
         this.scene.add(this.sun);
         // this.scene.add(this.ambient);
@@ -86,7 +87,15 @@ export default class Scene{
         const renderer = this.renderer;
         camera.aspect = window.innerWidth / window.innerHeight
         camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
+        const display = this.screenSize();
+        renderer.setSize(display.x, display.y)
+    }
+    screenSize() {
+        const diff = 5;
+        return new THREE.Vector2(
+            window.innerWidth - diff*window.innerWidth/100,
+            window.innerHeight - diff*window.innerWidth/100
+        );
     }
     dragStart(event) {
         this.controls.enabled = false;

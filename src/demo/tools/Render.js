@@ -77,7 +77,6 @@ export class Render {
                 for (const job of this.jobs) {
                     if(job.jobID !== jobInfo.jobID) continue;
                     job.status = jobInfo.status;
-                    if(job.status === "COMPLETED") console.log(msg);
                     this.updateJob(job);
                     break;
                 }
