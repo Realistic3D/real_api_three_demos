@@ -1,8 +1,6 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {DebugInfo, DebugSpecial} from "../core/debug_core";
-import * as THREE from "three";
 import {ShiftPivot} from "../core/model_core";
-import {AddAxes} from "../core/axes_core";
+import {DebugInfo, DebugSpecial} from "../core/debug_core";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export async function GLTFLocalLoader(app, text) {
     const loader = new GLTFLoader();

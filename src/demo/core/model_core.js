@@ -31,17 +31,17 @@ export function ShiftPivot(model){
         (max.y + min.y)/2,
         (max.z + min.z)/2
     );
-    let scale = 1;
-    if(size.x <= 0.1 && size.y <= 0.1 && size.y <= 0.1) scale = 500;
-    else if(size.x >= 50 && size.y >= 50 && size.y >= 50) scale = 0.1;
-    else if(size.x <= 1 && size.y <= 1 && size.y <= 1) scale = 10;
-    else if(size.x >= 150 && size.z >= 150) scale = 0.1;
-    else if(size.x >= 70 && size.z >= 70) scale = 0.1;
-    else console.error(size)
+    // let scale = 1;
+    // if(size.x <= 0.1 && size.y <= 0.1 && size.y <= 0.1) scale = 500;
+    // else if(size.x >= 50 && size.y >= 50 && size.y >= 50) scale = 0.1;
+    // else if(size.x <= 1 && size.y <= 1 && size.y <= 1) scale = 10;
+    // else if(size.x >= 150 && size.z >= 150) scale = 0.1;
+    // else if(size.x >= 70 && size.z >= 70) scale = 0.1;
+    // else console.error(size)
+    // pivot.scale.set(scale, scale, scale);
 
     model.position.set(-center.x, -center.y, -center.z);
     const pivot = GetPivot(size);
-    pivot.scale.set(scale, scale, scale);
     pivot.add(model);
     pivot.userData.size = size;
     return pivot;

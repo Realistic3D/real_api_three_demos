@@ -1,5 +1,6 @@
 import {DebugError, DebugSpecial, DebugInfo, SizeMBs} from "./debug_core";
 import {GLTFLocalLoader} from "../loaders/gltf_buffer_loader";
+import {BlenderLocalLoader} from "../loaders/blender_loader";
 
 export async function UploadModel(app, event) {
     const files = event.target.files;
@@ -32,6 +33,9 @@ export async function LoadLocal(app, file) {
                 case "gltf":
                     await GLTFLocalLoader(app, text);
                     break;
+                case "blend":
+                    await BlenderLocalLoader(app, text);
+                    break;
             }
         }
     );
@@ -40,7 +44,7 @@ export async function LoadLocal(app, file) {
 }
 function isValidExt(ext) {
     const extension = ext.toString().toLowerCase();
-    return ["stl", "obj", "fbx", "glb", "gltf"].includes(ext);
+    return ["stl", "obj", "fbx", "glb", "gltf", "blend"].includes(extension);
 }
 function extractName(fileName) {
     const spl = fileName.toString().split(".");
