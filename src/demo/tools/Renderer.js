@@ -5,16 +5,15 @@ export class Renderer {
     constructor(app) {
         this.app = app;
         this.jobs = [];
-        this.socket = null;
         this.realApp = null;
         this.renderInfo = "";
     }
     async login(loginData) {
         localStorage['login'] = JSON.stringify(loginData);
-        this.socket = new SocketManager(this, loginData);
+        const socket = new SocketManager(this.onSocketMessage, loginData);
     }
     onSocketMessage(type, msg, data) {
-        console.log()
+        console.log(type, msg, data)
         switch (type) {
             case "auth_success":
                 this.loginSuccess();
@@ -22,10 +21,12 @@ export class Renderer {
         }
     }
     loginSuccess() {
-        this.renderInfo = "Login success";
-        this.app.toggles.info = true;
-        this.app.toggles.render = true; // render button
-        this.app.user.isLoggedIn = true;
+        const that = this;
+        const app = that.app;
+        that.renderInfo = "Login success";
+        // app.toggles.info = true;
+        // app.toggles.render = true; // render button
+        app.toggles.isLoggedIn = true;
     }
     // async updateServices(userResponse) {
     //     const msg = userResponse.msg;

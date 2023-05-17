@@ -13,16 +13,10 @@ export async function House(app) {
 }
 async function LoadRoom(app, mesh) {
     const room = mesh.scene;
-    app.events.loadingBar = false;
+    app.toggles.loadingBar = false;
     const scene = app.scene;
     room.name = "REAL_ROOM";
     const camera = scene.camera;
-    // const renderer = scene.renderer;
-    // renderer.toneMappingExposure = 2.3
-    // renderer.shadowMap.enabled = true;
-    // renderer.outputEncoding = THREE.sRGBEncoding;
-    // renderer.setClearColor( 0x000000, 1 );
-    //
     room.traverse((o) => {
         if (o.isMesh) {
             o.castShadow = true;
@@ -42,7 +36,6 @@ async function Progress(app, data) {
     const fact = 100;
     const loaded = data.loaded / data.total * fact;
     app.loadingBar(loaded);
-    console.log(loaded);
 }
 function Error(error) {
     console.error(error);

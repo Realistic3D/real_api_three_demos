@@ -1,8 +1,8 @@
 export class SocketManager{
-    constructor(renderer, loginData) {
+    constructor(callback, loginData) {
         this.connectCount = 0;
         this.connected = false;
-        this.renderer = renderer;
+        this.callback = callback;
         this.uri = getURI(loginData);
         this.socket = new WebSocket(this.uri);
         this.initSocket();
@@ -27,7 +27,7 @@ export class SocketManager{
         const msg = renderInfo.msg;
         const data = renderInfo.data;
         const type = renderInfo.type;
-        this.renderer.onSocketMessage(type, msg, data);
+        this.callback && this.callback(type, msg, data);
     }
     ReconnectSocket()
     {
