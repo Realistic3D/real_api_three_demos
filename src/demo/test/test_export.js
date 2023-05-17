@@ -2,7 +2,7 @@
 // import {USDZExporter} from "three/examples/jsm/exporters/USDZExporter";
 import * as REAL from "../real_api/real.three.min"
 import {GetBin} from "../real_api/real.three.min";
-import {ShowPivot} from "../tools/Render";
+import {ShowPivot} from "../tools/Renderer";
 
 
 export async function TestExport(scene, camera) {

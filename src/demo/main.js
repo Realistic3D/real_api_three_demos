@@ -12,6 +12,6 @@ export async function Start(that) {
     await House(that);
     // await ClassRoom(that);
     // await RenderThree(scene);
-    await TestAny(scene);
+    // await TestAny(scene);
     return 1;
 }

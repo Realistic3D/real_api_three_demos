@@ -72,24 +72,21 @@
                     <label class="label" for="AppSecrets">AppSecrets:</label>
                     <input class="Login_input" type="password" id="as" name="x" :value="login.appSecret">
                     <br>
-                    <label class="label" for="ProductName">ProductName:</label>
-                    <input class="Login_input" type="text" id="lpn" name="x" :value="login.product.prodName">
-                    <br>
                     <label class="label" for="ProductKey">ProductKey:</label>
-                    <input class="Login_input" type="password" id="lpk" name="x" :value="login.product.prodKey">
+                    <input class="Login_input" type="password" id="lpk" name="x" :value="login.prodKey">
                     <br>
                     <label class="label" for="InstanceID">InstanceID:</label>
-                    <input class="Login_input" type="number" id="lpid" name="x" :value="login.product.insID">
+                    <input class="Login_input" type="number" id="lpid" name="x" :value="login.insID">
                     <br>
 
                     <br>
                     <input class="cnt_btn" type="button" value="Login" @click="loginUpdate">
-                    <label class="Login_input" id="render_info" v-if="render">{{render.info}}</label>
+                    <label class="Login_input" id="render_info" v-if="renderer">{{ renderer.info }}</label>
                     <br>
                 </form>
 
                 <button v-if="toggles.render" class="btn btn-light btn-block" @click="renderClicked">RENDER NOW</button>
-                <input class="Info" v-if="render && toggles.info" :value="render.info"/>
+                <input class="Info" v-if="renderer && toggles.info" :value="renderer.info"/>
             </div>
             <div class="section" id="render_jobs"></div>
 

@@ -7,7 +7,7 @@ import {GLTFParser} from "./demo/loaders/gltf_buffer_loader";
 import {Raycast} from "./demo/tools/Raycast";
 import {DebugError} from "./demo/core/debug_core";
 import {DegreeRadians} from "./demo/core/math_core";
-import {Render} from "./demo/tools/Render";
+import {Renderer} from "./demo/tools/Renderer";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -25,16 +25,13 @@ const app = new Vue({
     data: {
         ray: null,
         scene: null,
-        render: null,
+        renderer: null,
         login: {
             appKey: null,
             userName: null,
             appSecret: null,
-            product: {
-                insID: 0,
-                prodKey: null,
-                prodName: null,
-            },
+            insID: 0,
+            prodKey: null,
             status: ""
         },
         user: {
@@ -97,7 +94,7 @@ const app = new Vue({
             await AddAreaLight(this);
         },
         async renderClicked() {
-            await this.render.newJob();
+            await this.renderer.newJob();
         },
         async renderResultClicked() {
             this.events.renderResult = !this.events.renderResult;
@@ -126,19 +123,25 @@ const app = new Vue({
                     case "as":
                         this.login.appSecret = value;
                         break;
-                    case "lpn":
-                        this.login.product.prodName = value;
-                        break;
                     case "lpk":
-                        this.login.product.prodKey = value;
+                        this.login.prodKey = value;
                         break;
                     case "lpid":
-                        this.login.product.insID = value;
+                        this.login.insID = value;
                         break;
                 }
             }
-            this.render.info = "Logging in....";
-            await this.render.login(this.login);
+            this.renderer.info = "Logging in....";
+
+            const logData = this.login;
+            const login = {
+                userName: logData.userName,
+                appKey: logData.appKey,
+                appSecret: logData.appSecret,
+                insID: logData.insID,
+                prodKey: logData.prodKey
+            }
+            await this.renderer.login(login);
         },
         transformUpdated(evt, type) {
             const value = evt.target.value;
@@ -186,11 +189,11 @@ const app = new Vue({
     },
     async mounted() {
         this.loadCache();
-        this.render = new Render(this);
+        this.renderer = new Renderer(this);
         await Start(this);
         this.ray = new Raycast(this);
         // await this.loadAxes();
         // await Start(this);
-        this.test();
+        // this.test();
     },
 })
