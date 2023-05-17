@@ -9,14 +9,17 @@ export class Renderer {
         this.renderInfo = "";
     }
     async login(loginData) {
+        this.renderInfo = "Logging in....";
+        this.app.toggles.busy = true;
         localStorage['login'] = JSON.stringify(loginData);
-        const socket = new SocketManager(this.onSocketMessage, loginData);
+        const socket = new SocketManager(this, loginData);
     }
     onSocketMessage(type, msg, data) {
         console.log(type, msg, data)
         switch (type) {
             case "auth_success":
                 this.loginSuccess();
+                this.updateJobs(data);
                 break;
         }
     }
@@ -24,9 +27,34 @@ export class Renderer {
         const that = this;
         const app = that.app;
         that.renderInfo = "Login success";
-        // app.toggles.info = true;
-        // app.toggles.render = true; // render button
+        app.toggles.canRender = true;
         app.toggles.isLoggedIn = true;
+    }
+    updateJobs(jobs) {
+        this.app.jobs = [];
+        const appJobs = this.app.jobs;
+        for (const job of jobs) {
+            appJobs.push({
+                jobID: job.jobID,
+                status: job.status,
+                exportFrom: job.exportFrom
+            })
+        }
+        // job = {
+        //     jobID : "20230518041043806758842781",
+        //     status : "UPLOADED",
+        //     url : null
+        // }
+        // let have = false;
+        // for (const curJob of this.jobs) {
+        //     if(curJob.jobID === job.jobID) {
+        //         have = true;
+        //         curJob.status = job.status;
+        //         break;
+        //     }
+        // }
+        // if(!have) this.jobs.push(job);
+        // CreateJobList(this.jobs, this.app);
     }
     // async updateServices(userResponse) {
     //     const msg = userResponse.msg;
@@ -77,19 +105,6 @@ export class Renderer {
     //             return;
     //     }
     //     // console.error(EnumString(type), type, msg);
-    // }
-
-    // updateJob(job) {
-    //     let have = false;
-    //     for (const curJob of this.jobs) {
-    //         if(curJob.jobID === job.jobID) {
-    //             have = true;
-    //             curJob.status = job.status;
-    //             break;
-    //         }
-    //     }
-    //     if(!have) this.jobs.push(job);
-    //     CreateJobList(this.jobs, this.app);
     // }
     // loginSuccess() {
     //     CreateJobList(this.jobs, this.app);
@@ -172,26 +187,26 @@ async function setResultHTML(section, el, job, app) {
     // console.log(button)
     button.onclick = async () => { await ShowResult(url, app);}
 }
-export async function ShowResult(url, app) {
-
-    const section = document.getElementById("render_result");
-    for (const child of section.childNodes) {
-        if(child.id !== "render_img") continue;
-        const canvas = app.scene.renderer.domElement;
-        app.show.url = url;
-        app.show.img = child;
-        child.width = canvas.width;
-        child.height = canvas.height;
-        child.src = url;
-        if(!app.events.imgResize) {
-            window.addEventListener('resize', ()=> {onWindowResize(canvas, child)}, false);
-            app.events.imgResize = true;
-        }
-        break;
-    }
-    app.toggles.showResult = true;
-    app.events.renderResult = true;
-}
+// export async function ShowResult(url, app) {
+//
+//     const section = document.getElementById("render_result");
+//     for (const child of section.childNodes) {
+//         if(child.id !== "render_img") continue;
+//         const canvas = app.scene.renderer.domElement;
+//         app.show.url = url;
+//         app.show.img = child;
+//         child.width = canvas.width;
+//         child.height = canvas.height;
+//         child.src = url;
+//         if(!app.events.imgResize) {
+//             window.addEventListener('resize', ()=> {onWindowResize(canvas, child)}, false);
+//             app.events.imgResize = true;
+//         }
+//         break;
+//     }
+//     app.toggles.showResult = true;
+//     app.events.renderResult = true;
+// }
 function onWindowResize(canvas, child) {
     child.width = canvas.width;
     child.height = canvas.height;

@@ -27,6 +27,7 @@ const app = new Vue({
         ray: null,
         scene: null,
         renderer: null,
+        jobs: [],
         login: {
             appKey: null,
             userName: null,
@@ -44,13 +45,15 @@ const app = new Vue({
           rotation: {x: 0, y: 0, z: 0},
         },
         progressValue: 50,
-        show: {
-          url: "",
-          img: null,
-        },
+        // show: {
+        //   url: "",
+        //   img: null,
+        // },
         toggles: {
+            busy: false,
             isLoggedIn: false,
             loadingBar: false,
+            canRender: false,
             // info: false,
             // render: false,
             // transform: false,
@@ -64,8 +67,33 @@ const app = new Vue({
         // }
     },
     methods: {
-        loginForm(evt) {
-            console.log(evt);
+        async loginForm(evt) {
+            const form = evt.target.form;
+            for (const element of form) {
+                const type = element.id;
+                const value = element.value;
+                switch (type) {
+                    case "un":
+                        this.login.userName = value;
+                        break;
+                    case "ak":
+                        this.login.appKey = value;
+                        break;
+                    case "as":
+                        this.login.appSecret = value;
+                        break;
+                    case "lpk":
+                        this.login.prodKey = value;
+                        break;
+                    case "lpid":
+                        this.login.insID = value;
+                        break;
+                }
+            }
+            await this.renderer.login(this.login);
+        },
+        async renderClicked(evt) {
+          //
         },
         loadingBar(progress) {
             const elem = document.getElementById("myBar");

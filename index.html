@@ -28,8 +28,10 @@
 </script>
 
 <body>
+
 <div id="app">
     <div class="UI">
+        <label class="render-info" v-if="renderer && renderer.renderInfo">{{ renderer.renderInfo }}</label>
 
         <div v-if="toggles.loadingBar === true" id="myProgress">
             <div id="myBar">
@@ -38,31 +40,54 @@
         </div>
 
         <div v-if="!toggles.loadingBar">
-            <form class="Login" v-if="!toggles.isLoggedIn">
-                <br>
-                <label class="label" for="Username">Username:</label>
-                <input class="Login_input" type="text" id="un" name="x" :value="login.userName">
-                <br>
-                <label class="label" for="AppKey">AppKey:</label>
-                <input class="Login_input" type="password" id="ak" name="x" :value="login.appKey">
-                <br>
-                <label class="label" for="AppSecrets">AppSecrets:</label>
-                <input class="Login_input" type="password" id="as" name="x" :value="login.appSecret">
-                <br>
-                <label class="label" for="ProductKey">ProductKey:</label>
-                <input class="Login_input" type="password" id="lpk" name="x" :value="login.prodKey">
-                <br>
-                <label class="label" for="InstanceID">InstanceID:</label>
-                <input class="Login_input" type="number" id="lpid" name="x" :value="login.insID">
-                <br>
 
-                <br>
-                <input class="cnt_btn" type="button" value="Login" @click="loginForm">
-                <label class="Login_input" id="render_info" v-if="renderer">{{ renderer.info }}</label>
-                <br>
-            </form>
+            <div class="login-container" v-if="!toggles.busy && !toggles.isLoggedIn">
+                <form class="Login">
+                    <br>
+                    <label class="label" for="Username">Username:</label>
+                    <input class="Login_input" type="text" id="un" name="x" :value="login.userName">
+                    <br>
+                    <label class="label" for="AppKey">AppKey:</label>
+                    <input class="Login_input" type="password" id="ak" name="x" :value="login.appKey">
+                    <br>
+                    <label class="label" for="AppSecrets">AppSecrets:</label>
+                    <input class="Login_input" type="password" id="as" name="x" :value="login.appSecret">
+                    <br>
+                    <label class="label" for="ProductKey">ProductKey:</label>
+                    <input class="Login_input" type="password" id="lpk" name="x" :value="login.prodKey">
+                    <br>
+                    <label class="label" for="InstanceID">InstanceID:</label>
+                    <input class="Login_input" type="number" id="lpid" name="x" :value="login.insID">
+                    <br>
+
+                    <br>
+                    <input class="cnt_btn" type="button" value="Login" @click="loginForm">
+                    <br>
+                </form>
+            </div>
+
+            <div class="job-list" v-if="toggles.isLoggedIn">
+                <div class="job-heading">
+                    <div>Job ID</div>
+                    <div>Status</div>
+                    <div></div>
+                </div>
+                <div v-for="job in jobs" :key="job.jobID" class="job-item">
+                    <div>{{ job.jobID }}</div>
+                    <div>{{ job.status }}</div>
+                    <div class="job-button">
+                        <button>View</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div v-if="toggles.isLoggedIn">
+                <button v-if="toggles.canRender" class="render-btn" @click="renderClicked">RENDER NOW</button>
+            </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>
