@@ -66,24 +66,25 @@
                 </form>
             </div>
 
-            <div class="job-list" v-if="toggles.isLoggedIn">
-                <div class="job-heading">
-                    <div>Job ID</div>
-                    <div>Status</div>
-                    <div></div>
-                </div>
-                <div v-for="job in jobs" :key="job.jobID" class="job-item">
-                    <div>{{ job.jobID }}</div>
-                    <div>{{ job.status }}</div>
-                    <div class="job-button">
-                        <button>View</button>
+            <div v-if="toggles.isLoggedIn">
+                <div class="job-list">
+                    <div class="job-heading">
+                        <div>Job ID</div>
+                        <div>Status</div>
+                        <div></div>
+                    </div>
+                    <div v-for="job in jobs" :key="job.jobID" class="job-item">
+                        <div>{{ job.jobID }}</div>
+                        <div>{{ job.status }}</div>
+                        <div class="job-button">
+                            <button>View</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-
-            <div v-if="toggles.isLoggedIn">
-                <button v-if="toggles.canRender" class="render-btn" @click="renderClicked">RENDER NOW</button>
+                <div>
+                    <button v-if="toggles.canRender" class="render-btn" @click="renderClicked">RENDER NOW</button>
+                </div>
             </div>
         </div>
     </div>
