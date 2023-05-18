@@ -33,6 +33,15 @@
     <div class="UI">
         <label class="render-info" v-if="renderer && renderer.renderInfo">{{ renderer.renderInfo }}</label>
 
+        <div class="image-viewer">
+            <img id="result" src="" alt="Image" />
+            <div class="controls">
+                <button id="maximizeBtn">Maximize</button>
+                <button id="minimizeBtn">Minimize</button>
+                <button id="closeBtn">Close</button>
+            </div>
+        </div>
+
         <div v-if="toggles.loadingBar === true" id="myProgress">
             <div id="myBar">
                 <div class="loading_text">Loading assets: {{progressValue}}%</div>
@@ -67,6 +76,7 @@
             </div>
 
             <div v-if="toggles.isLoggedIn">
+
                 <div class="job-list">
                     <div class="job-heading">
                         <div>Job ID</div>
@@ -77,13 +87,13 @@
                         <div>{{ job.jobID }}</div>
                         <div>{{ job.status }}</div>
                         <div class="job-button">
-                            <button>View</button>
+                            <button :disabled="job.status !== 'COMPLETED'" @click="showResult(job.jobID)">View</button>
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <button v-if="toggles.canRender" class="render-btn" @click="renderClicked">RENDER NOW</button>
+                <div v-if="toggles.canRender">
+                    <button class="render-btn" @click="renderClicked">RENDER NOW</button>
                 </div>
             </div>
         </div>

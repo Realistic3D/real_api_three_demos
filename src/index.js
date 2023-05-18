@@ -36,24 +36,17 @@ const app = new Vue({
             prodKey: null,
             status: ""
         },
-        // user: {
-        //     isLoggedIn: false,
-        // },
         transform: {
           scale: {x: 1, y: 1, z: 1},
           position: {x: 0, y: 0, z: 0},
           rotation: {x: 0, y: 0, z: 0},
         },
         progressValue: 50,
-        // show: {
-        //   url: "",
-        //   img: null,
-        // },
         toggles: {
             busy: false,
+            canRender: false,
             isLoggedIn: false,
             loadingBar: false,
-            canRender: false,
             // info: false,
             // render: false,
             // transform: false,
@@ -90,10 +83,27 @@ const app = new Vue({
                         break;
                 }
             }
-            await this.renderer.login(this.login);
+            await this.renderer.login();
         },
         async renderClicked(evt) {
-          //
+          console.log("New Job");
+        },
+        async showResult(jobID) {
+            this.result = null;
+            // console.log("RESULT", jobID);
+            const img = await this.renderer.getResult(jobID);
+            if(!img) {
+                this.renderer.renderInfo = "Failed to get result";
+                return;
+            }
+            for (const job of this.jobs) {
+                if (job.jobID === jobID) {
+                    job.img = img;
+                    break;
+                }
+            }
+            this.renderer.renderInfo = "Loaded";
+            this.renderer.event.showImage(img);
         },
         loadingBar(progress) {
             const elem = document.getElementById("myBar");

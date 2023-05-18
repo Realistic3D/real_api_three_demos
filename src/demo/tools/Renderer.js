@@ -1,18 +1,21 @@
-import * as REAL from "real_api";
-import {SocketManager} from "../socket_tools/SocketManager";
+import {SocketManager} from "../network_tools/SocketManager";
+import {RequestManager} from "../network_tools/RequestManager";
+import {EventManager} from "../network_tools/EventManager";
 
 export class Renderer {
     constructor(app) {
         this.app = app;
-        this.jobs = [];
-        this.realApp = null;
         this.renderInfo = "";
+        this.event = new EventManager();
+        this.network = new RequestManager();
     }
-    async login(loginData) {
+    async login() {
+        const app = this.app;
         this.renderInfo = "Logging in....";
-        this.app.toggles.busy = true;
+        const loginData = app.login;
+        app.toggles.busy = true;
         localStorage['login'] = JSON.stringify(loginData);
-        const socket = new SocketManager(this, loginData);
+        this.socket = new SocketManager(this, loginData);
     }
     onSocketMessage(type, msg, data) {
         console.log(type, msg, data)
@@ -37,120 +40,40 @@ export class Renderer {
             appJobs.push({
                 jobID: job.jobID,
                 status: job.status,
-                exportFrom: job.exportFrom
+                exportFrom: job.exportFrom,
+                img: null
             })
         }
-        // job = {
-        //     jobID : "20230518041043806758842781",
-        //     status : "UPLOADED",
-        //     url : null
-        // }
-        // let have = false;
-        // for (const curJob of this.jobs) {
-        //     if(curJob.jobID === job.jobID) {
-        //         have = true;
-        //         curJob.status = job.status;
-        //         break;
-        //     }
-        // }
-        // if(!have) this.jobs.push(job);
-        // CreateJobList(this.jobs, this.app);
     }
-    // async updateServices(userResponse) {
-    //     const msg = userResponse.msg;
-    //     const data = userResponse.data;
-    //     const type = userResponse.type;
-    //     switch (type) {
-    //         case Status.Login:
-    //             this.info = "Login success";
-    //             this.app.toggles.info = true;
-    //             this.app.user.isLoggedIn = true;
-    //             for (const datum of data) {
-    //                 this.jobs.push(datum)
-    //             }
-    //             this.loginSuccess();
-    //             break;
-    //         case Status.LoginFailed:
-    //             this.app.toggles.info = false;
-    //             this.info = "Login failed";
-    //             break;
-    //         case Status.NewJob:
-    //             if(msg !== "SUCCESS") {
-    //                 this.info = "Exporting failed";
-    //                 return;
-    //             }
-    //             this.updateJob(data);
-    //             this.info = "EXPORTED";
-    //             break;
-    //         case Status.JobStatus:
-    //             if(!data) return;
-    //             const jobInfo = data;
-    //             for (const job of this.jobs) {
-    //                 if(job.jobID !== jobInfo.jobID) continue;
-    //                 job.status = jobInfo.status;
-    //                 this.updateJob(job);
-    //                 break;
-    //             }
-    //             break;
-    //         case Status.Upload:
-    //             if(msg === "SUCCESS") {
-    //                 this.info = "Registering success";
-    //                 const job = {jobID: data, status: "UPLOADED"};
-    //                 this.updateJob(job);
-    //             }
-    //             else this.info = `Registering failed! ${msg}`;
-    //             break;
-    //         default:
-    //             this.info = msg;
-    //             return;
-    //     }
-    //     // console.error(EnumString(type), type, msg);
-    // }
-    // loginSuccess() {
-    //     CreateJobList(this.jobs, this.app);
-    //     this.app.toggles.render = true;
-    // }
-    // async newJob() {
-    //     if(!this.realApp.isLoggedIn) {
-    //         this.info = "Please login first";
-    //         return;
-    //     }
-    //     const scene = this.app.scene.scene;
-    //     const camera = this.app.scene.camera;
-    //
-    //     const pivots = [];
-    //     scene.traverse((child) => {
-    //         if(child.name === "REAL_PIVOT") {
-    //             const parent = child.parent;
-    //             const children = child.children;
-    //             pivots.push({
-    //                 pivot: child,
-    //                 children: children
-    //             })
-    //             for (const child1 of children) {
-    //                 parent.attach(child1);
-    //             }
-    //             parent.remove(child);
-    //         }
-    //     });
-    //
-    //     const exp = await REAL.RenderScene(this.realApp, scene, camera);
-    //     switch (exp) {
-    //         case REAL.ConvertStatus.SUCCESS:
-    //             this.info = "Exporting success";
-    //             break;
-    //         case REAL.ConvertStatus.FAILED:
-    //             this.info = "Exporting failed";
-    //             break;
-    //         case REAL.ConvertStatus.NOT_LOGGED:
-    //             this.info = "Please login first";
-    //             break;
-    //         case REAL.ConvertStatus.ALREADY:
-    //             this.info = "Already exporting";
-    //             break;
-    //     }
-    //     ShowPivot(scene);
-    // }
+    async getResult(jobID) {
+        this.renderInfo = "Loading result";
+        const app = this.app;
+        const jobs = app.jobs;
+        for (const job of jobs) {
+            if(job.jobID === jobID && job.img) return job.img;
+        }
+        const loginData = app.login;
+        const params = {
+            "prodCred": {
+                "insID": loginData.insID,
+                "appKey": loginData.appKey,
+                "prodKey": loginData.prodKey
+            },
+            "ask": "result",
+            "service": {
+                "jobID": jobID
+            }
+        }
+        this.renderInfo = "Applying for result";
+        const jobData = await this.network.postResponse(params);
+        if(!jobData) return;
+        const jobUrl = jobData.url;
+        if(typeof jobUrl !== "string") return;
+        if(!jobUrl.startsWith("http")) return;
+        this.renderInfo = "Downloading result";
+        return await this.network.downloadImg(jobUrl);
+    }
+
 }
 export function CreateJobList(jobs, app) {
     let section  = document.getElementById("render_jobs");
