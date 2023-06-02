@@ -76,7 +76,7 @@
 
             <div v-if="toggles.isLoggedIn">
 
-                <div class="job-list">
+                <div v-if="jobs.length > 0" class="job-list">
                     <div class="job-heading">
                         <div>Job ID</div>
                         <div>Status</div>

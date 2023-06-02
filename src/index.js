@@ -1,14 +1,9 @@
 import VueLazyLoad from "vue-lazyload";
-import {UploadModel} from "./demo/core/local_loader";
-import {AddAreaLight} from "./demo/core/arealight_core";
-import {GltfLocalLoader} from "./demo/loaders/gltf_local";
-import {GLTFParser} from "./demo/loaders/gltf_buffer_loader";
-import {Raycast} from "./demo/tools/Raycast";
-import {DebugError} from "./demo/core/debug_core";
-import {DegreeRadians} from "./demo/core/math_core";
 import {Renderer} from "./demo/tools/Renderer";
 import Scene from "./demo/tools/Scene";
 import {House} from "./demo/room/house";
+import * as REAL from "real_api";
+import {ErrorInfo} from "./demo/tools/debug_tools";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -47,17 +42,7 @@ const app = new Vue({
             canRender: false,
             isLoggedIn: false,
             loadingBar: false,
-            // info: false,
-            // render: false,
-            // transform: false,
-            // showResult: false,
         },
-        // events: {
-        //     // loadingBar: true,
-        //     // imgResize: false,
-        //     // uploadModel: null,
-        //     // renderResult: false,
-        // }
     },
     methods: {
         async loginForm(evt) {
@@ -86,7 +71,45 @@ const app = new Vue({
             await this.renderer.login();
         },
         async renderClicked(evt) {
-          console.log("New Job");
+            try {
+                // Step 1: Get scene
+                this.renderer.renderInfo = "Getting scene";
+                const scene = this.scene.scene;
+                const camera = this.scene.camera;
+                const realScene = await REAL.Scene(scene, camera);
+
+                // Step 2: Apply for upload URI
+                const newJob = await this.renderer.newJob();
+                if(!newJob) {
+                    this.renderer.renderInfo = "Failed!";
+                    return
+                }
+
+                const jobID = newJob.jobID;
+                const uri = newJob.url;
+                if(!jobID || !uri) {
+                    this.renderer.renderInfo = "Failed!";
+                    return
+                }
+
+                // Step 3: Upload
+                console.log(uri);
+
+                this.renderer.renderInfo = "Uploading...";
+                const uploaded = await this.renderer.uploadJob(uri, realScene);
+                if(!uploaded) {
+                    this.renderer.renderInfo = "Uploading failed!";
+                    return
+                }
+
+                // Step 4: Submit/Render
+                this.renderer.renderInfo = "Submitting...";
+                const subRes = await this.renderer.submitJob(jobID);
+                this.renderer.renderInfo = "Finished";
+            }
+            catch (e) {
+                ErrorInfo(e)
+            }
         },
         async showResult(jobID) {
             this.result = null;
@@ -127,11 +150,5 @@ const app = new Vue({
         this.loadCache();
         this.renderer = new Renderer(this);
         await this.Start();
-
-        // this.ray = new Raycast(this);
-
-        // await this.loadAxes();
-        // await Start(this);
-        // this.test();
     },
 })

@@ -1,19 +1,21 @@
 import * as REAL from "real_api";
 import axios from "axios";
+import {ErrorResponse} from "../tools/debug_tools";
 
 
 export class RequestManager {
     constructor() {
         this.uri = `https://${REAL.Domain}/rapi/ask_service`;
+        // this.uri = `http://localhost:8001/rapi/ask_service`;
     }
     async postResponse(params) {
         const response = await axios.post(this.uri, params);
         if(response.status === 200) {
             const resData = response.data;
             if(isDict(resData.data)) return resData.data;
-            return errorResponse(resData.msg);
+            return ErrorResponse(resData.msg);
         }
-        errorResponse(JSON.stringify(response));
+        ErrorResponse(JSON.stringify(response));
     }
     async downloadImg(jobUrl) {
         let imageUrl;
@@ -22,17 +24,25 @@ export class RequestManager {
             const blob = response.data;
             imageUrl = URL.createObjectURL(blob);
         } catch (error) {
-            errorResponse(error);
-            errorResponse("Failed to download image:");
+            ErrorResponse(error);
+            ErrorResponse("Failed to download image:");
             return;
         }
         return imageUrl;
     }
+
+    async putResponse(uri, scene){
+        try {
+            const request = await axios.put(uri, scene);
+            return request.status === 200;
+        }
+        catch (e) {
+            console.error(e);
+            return false;
+        }
+    }
 }
-function errorResponse(message) {
-    console.log('%c' + message, 'color: red; font-size: 16px; font-weight: bold;');
-    return 0;
-}
+
 function isDict(value) {
     try {
         if(typeof value === 'object' && value !== null) return true;

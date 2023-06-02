@@ -1,6 +1,8 @@
+import * as REAL from "real_api";
+import {EventManager} from "../network_tools/EventManager";
 import {SocketManager} from "../network_tools/SocketManager";
 import {RequestManager} from "../network_tools/RequestManager";
-import {EventManager} from "../network_tools/EventManager";
+import {ErrorInfo} from "./debug_tools";
 
 export class Renderer {
     constructor(app) {
@@ -24,6 +26,11 @@ export class Renderer {
                 this.loginSuccess();
                 this.updateJobs(data);
                 break;
+            case "status":
+                if(!data) return;
+                if(data.length) this.updateJobs(data);
+                else this.updateJob(data);
+                break;
         }
     }
     loginSuccess() {
@@ -33,10 +40,30 @@ export class Renderer {
         app.toggles.canRender = true;
         app.toggles.isLoggedIn = true;
     }
+    updateJob(job) {
+        if(!job.jobID || !job.status) return;
+        const appJobs = this.app.jobs;
+        for(let i=0; i<appJobs.length; i++) {
+            const curJob = appJobs[i];
+            if(curJob.jobID === job.jobID) {
+                appJobs[i] = job;
+                return;
+            }
+        }
+
+        appJobs.push({
+            jobID: job.jobID,
+            status: job.status,
+            exportFrom: job.exportFrom,
+            img: null
+        });
+    }
     updateJobs(jobs) {
         this.app.jobs = [];
         const appJobs = this.app.jobs;
         for (const job of jobs) {
+            if(job.expFrom !== "3js") continue;
+            console.log(job)
             appJobs.push({
                 jobID: job.jobID,
                 status: job.status,
@@ -45,6 +72,46 @@ export class Renderer {
             })
         }
     }
+    async newJob() {
+        this.renderInfo = "Applying for URI";
+        const loginData = this.app.login;
+        const params = {
+            "prodCred": {
+                "insID": loginData.insID,
+                "appKey": loginData.appKey,
+                "prodKey": loginData.prodKey
+            },
+            "ask": "new_job",
+            "service": {
+                "type": "r3d"
+            },
+            "renderParams": {
+                "expFrom": "3js"
+            }
+        }
+        return await this.network.postResponse(params);
+    }
+
+    async submitJob(jobID) {
+        const loginData = this.app.login;
+        const params = {
+            "prodCred": {
+                "insID": loginData.insID,
+                "appKey": loginData.appKey,
+                "prodKey": loginData.prodKey
+            },
+            "ask": "submit",
+            "service": {
+                "jobID": jobID
+            }
+        }
+        return await this.network.postResponse(params);
+    }
+
+    async uploadJob(uri, scene) {
+        return await this.network.putResponse(uri, scene);
+    }
+
     async getResult(jobID) {
         this.renderInfo = "Loading result";
         const app = this.app;
@@ -73,7 +140,6 @@ export class Renderer {
         this.renderInfo = "Downloading result";
         return await this.network.downloadImg(jobUrl);
     }
-
 }
 export function CreateJobList(jobs, app) {
     let section  = document.getElementById("render_jobs");
@@ -110,35 +176,4 @@ async function setResultHTML(section, el, job, app) {
     // console.log(button)
     button.onclick = async () => { await ShowResult(url, app);}
 }
-// export async function ShowResult(url, app) {
-//
-//     const section = document.getElementById("render_result");
-//     for (const child of section.childNodes) {
-//         if(child.id !== "render_img") continue;
-//         const canvas = app.scene.renderer.domElement;
-//         app.show.url = url;
-//         app.show.img = child;
-//         child.width = canvas.width;
-//         child.height = canvas.height;
-//         child.src = url;
-//         if(!app.events.imgResize) {
-//             window.addEventListener('resize', ()=> {onWindowResize(canvas, child)}, false);
-//             app.events.imgResize = true;
-//         }
-//         break;
-//     }
-//     app.toggles.showResult = true;
-//     app.events.renderResult = true;
-// }
-function onWindowResize(canvas, child) {
-    child.width = canvas.width;
-    child.height = canvas.height;
-}
-export function ShowPivot(scene, visible = true) {
-    scene.traverse((child) => {
-        if(child.name === "REAL_PIVOT") child.material.opacity = visible ? child.material.userData.opacity: 0;
-    });
-}
-function ErrorLogin() {
-    DebugError("There is problem with login");
-}
+
