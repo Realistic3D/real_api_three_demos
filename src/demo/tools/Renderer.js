@@ -82,9 +82,6 @@ export class Renderer {
                 "prodKey": loginData.prodKey
             },
             "ask": "new_job",
-            "service": {
-                "type": "r3d"
-            },
             "renderParams": {
                 "expFrom": "3js"
             }
