@@ -10,8 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@tweenjs/tween.js": "17.3.0",
-        "axios": "^0.21.2",
+        "axios": "0.21.2",
         "bootstrap": "^4.4.1",
         "cross-env": "^5.1",
         "jquery": "^3.5.0",
@@ -24,15 +23,9 @@
         "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.11"
     },
-    "browser": {
-        "fs": false,
-        "path": false,
-        "os": false
-    },
     "dependencies": {
         "@vant/touch-emulator": "^1.2.0",
         "babel-runtime": "^6.26.0",
-        "filament": "^1.36.0",
         "html2canvas": "^1.4.1",
         "jszip": "^3.10.1",
         "lazyload": "^2.0.0-rc.2",

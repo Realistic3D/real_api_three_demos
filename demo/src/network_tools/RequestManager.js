@@ -1,4 +1,4 @@
-import * as REAL from "real_api_fmt"
+import * as REAL from "real_api";
 import axios from "axios";
 import {ErrorResponse} from "../tools/debug_tools";
 

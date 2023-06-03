@@ -1,10 +1,8 @@
-import * as REAL from "real_api_fmt";
 import VueLazyLoad from "vue-lazyload";
 import {Renderer} from "./tools/Renderer";
+import Scene from "./tools/Scene";
+import * as REAL from "real_api";
 import {ErrorInfo} from "./tools/debug_tools";
-import Scene from "./webgl_tools/Scene";
-// import {House} from "./demo/room/house";
-// import {ErrorInfo} from "./demo/tools/debug_tools";
 require("./js/bootstrap");
 window.Vue = require("vue");
 
@@ -73,61 +71,61 @@ const app = new Vue({
         },
         async renderClicked(evt) {
             try {
-                // // Step 1: Get scene
-                // this.renderer.renderInfo = "Getting scene";
-                // const scene = this.scene.scene;
-                // const camera = this.scene.camera;
-                // const realScene = await REAL.Scene(scene, camera);
-                //
-                // // Step 2: Apply for upload URI
-                // const newJob = await this.renderer.newJob();
-                // if(!newJob) {
-                //     this.renderer.renderInfo = "Failed!";
-                //     return
-                // }
-                //
-                // const jobID = newJob.jobID;
-                // const uri = newJob.url;
-                // if(!jobID || !uri) {
-                //     this.renderer.renderInfo = "Failed!";
-                //     return
-                // }
-                //
-                // // Step 3: Upload
-                // console.log(uri);
-                //
-                // this.renderer.renderInfo = "Uploading...";
-                // const uploaded = await this.renderer.uploadJob(uri, realScene);
-                // if(!uploaded) {
-                //     this.renderer.renderInfo = "Uploading failed!";
-                //     return
-                // }
-                //
-                // // Step 4: Submit/Render
-                // this.renderer.renderInfo = "Submitting...";
-                // const subRes = await this.renderer.submitJob(jobID);
-                // this.renderer.renderInfo = "Finished";
+                // Step 1: Get scene
+                this.renderer.renderInfo = "Getting scene";
+                const scene = this.scene.scene;
+                const camera = this.scene.camera;
+                const realScene = await REAL.Scene(scene, camera);
+
+                // Step 2: Apply for upload URI
+                const newJob = await this.renderer.newJob();
+                if(!newJob) {
+                    this.renderer.renderInfo = "Failed!";
+                    return
+                }
+
+                const jobID = newJob.jobID;
+                const uri = newJob.url;
+                if(!jobID || !uri) {
+                    this.renderer.renderInfo = "Failed!";
+                    return
+                }
+
+                // Step 3: Upload
+                console.log(uri);
+
+                this.renderer.renderInfo = "Uploading...";
+                const uploaded = await this.renderer.uploadJob(uri, realScene);
+                if(!uploaded) {
+                    this.renderer.renderInfo = "Uploading failed!";
+                    return
+                }
+
+                // Step 4: Submit/Render
+                this.renderer.renderInfo = "Submitting...";
+                const subRes = await this.renderer.submitJob(jobID);
+                this.renderer.renderInfo = "Finished";
             }
             catch (e) {
                 ErrorInfo(e)
             }
         },
         async showResult(jobID) {
-            // this.result = null;
-            // // console.log("RESULT", jobID);
-            // const img = await this.renderer.getResult(jobID);
-            // if(!img) {
-            //     this.renderer.renderInfo = "Failed to get result";
-            //     return;
-            // }
-            // for (const job of this.jobs) {
-            //     if (job.jobID === jobID) {
-            //         job.img = img;
-            //         break;
-            //     }
-            // }
-            // this.renderer.renderInfo = "Loaded";
-            // this.renderer.event.showImage(img);
+            this.result = null;
+            // console.log("RESULT", jobID);
+            const img = await this.renderer.getResult(jobID);
+            if(!img) {
+                this.renderer.renderInfo = "Failed to get result";
+                return;
+            }
+            for (const job of this.jobs) {
+                if (job.jobID === jobID) {
+                    job.img = img;
+                    break;
+                }
+            }
+            this.renderer.renderInfo = "Loaded";
+            this.renderer.event.showImage(img);
         },
         loadingBar(progress) {
             const elem = document.getElementById("myBar");
@@ -144,7 +142,6 @@ const app = new Vue({
         async Start() {
             const that = this;
             that.scene = new Scene(that.$refs.canvas);
-            // await House(that);
         }
     },
     async mounted() {

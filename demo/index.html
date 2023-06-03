@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real API</title>
+</head>
+
+<script type="text/javascript">
+    const head = document.getElementsByTagName('head')[0];
+    const url = "public/mix-manifest.json";
+    const request = new XMLHttpRequest();
+    request.open("get", url); /*设置请求方法与路径*/
+    request.send(null); /*不发送数据到服务器*/
+    request.onload = function() { /*XHR对象获取到返回信息后执行*/
+        if (request.status === 200) { /*返回状态为200，即为数据获取成功*/
+            let json = JSON.parse(request.responseText);
+            let script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'public' + json['/js/index.js'];
+            head.appendChild(script);
+            let link = document.createElement('link');
+            link.href = 'public' + json['/css/style.css'];
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            head.appendChild(link);
+        }
+    }
+</script>
+
+<body>
+
+<div id="app">
+    <div class="UI">
+        <label class="render-info" v-if="renderer && renderer.renderInfo">{{ renderer.renderInfo }}</label>
+
+        <div class="image-viewer">
+            <img id="result" src="" alt="Image" />
+            <div class="controls">
+                <button id="maxMinBtn">Full view</button>
+                <button id="closeBtn">Close</button>
+            </div>
+        </div>
+
+        <div v-if="toggles.loadingBar === true" id="myProgress">
+            <div id="myBar">
+                <div class="loading_text">Loading assets: {{progressValue}}%</div>
+            </div>
+        </div>
+
+        <div v-if="!toggles.loadingBar">
+
+            <div class="login-container" v-if="!toggles.busy && !toggles.isLoggedIn">
+                <form class="Login">
+                    <br>
+                    <label class="label" for="Username">Username:</label>
+                    <input class="Login_input" type="text" id="un" name="x" :value="login.userName">
+                    <br>
+                    <label class="label" for="AppKey">AppKey:</label>
+                    <input class="Login_input" type="password" id="ak" name="x" :value="login.appKey">
+                    <br>
+                    <label class="label" for="AppSecrets">AppSecrets:</label>
+                    <input class="Login_input" type="password" id="as" name="x" :value="login.appSecret">
+                    <br>
+                    <label class="label" for="ProductKey">ProductKey:</label>
+                    <input class="Login_input" type="password" id="lpk" name="x" :value="login.prodKey">
+                    <br>
+                    <label class="label" for="InstanceID">InstanceID:</label>
+                    <input class="Login_input" type="number" id="lpid" name="x" :value="login.insID">
+                    <br>
+
+                    <br>
+                    <input class="cnt_btn" type="button" value="Login" @click="loginForm">
+                    <br>
+                </form>
+            </div>
+
+            <div v-if="toggles.isLoggedIn">
+
+                <div v-if="jobs.length > 0" class="job-list">
+                    <div class="job-heading">
+                        <div>Job ID</div>
+                        <div>Status</div>
+                        <div></div>
+                    </div>
+                    <div v-for="job in jobs" :key="job.jobID" class="job-item">
+                        <div>{{ job.jobID }}</div>
+                        <div>{{ job.status }}</div>
+                        <div class="job-button">
+                            <button :disabled="job.status !== 'COMPLETED'" @click="showResult(job.jobID)">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="toggles.canRender">
+                    <button class="render-btn" @click="renderClicked">RENDER NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

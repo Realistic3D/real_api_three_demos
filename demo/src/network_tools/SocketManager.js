@@ -1,4 +1,4 @@
-import * as REAL from "real_api_fmt";
+import * as REAL from "real_api";
 
 export class SocketManager{
     constructor(renderer, loginData) {
