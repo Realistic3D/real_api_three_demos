@@ -8,7 +8,7 @@ export class Renderer {
     constructor(app) {
         this.app = app;
         this.renderInfo = "";
-        this.event = new EventManager();
+        this.event = new EventManager(app);
         this.network = new RequestManager();
     }
     async login() {

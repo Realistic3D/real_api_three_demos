@@ -141,7 +141,7 @@ const app = new Vue({
         },
         async Start() {
             const that = this;
-            that.scene = new Scene(that.$refs.canvas);
+            that.scene = new Scene();
         }
     },
     async mounted() {
