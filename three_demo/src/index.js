@@ -1,10 +1,10 @@
 import VueLazyLoad from "vue-lazyload";
-import {Renderer} from "./demo/tools/Renderer";
-import Scene from "./demo/tools/Scene";
-import {House} from "./demo/room/house";
+import {Renderer} from "./tools/Renderer";
+import Scene from "./tools/Scene";
+import {House} from "./room/house";
 import * as REAL from "real_api";
-import {ErrorInfo} from "./demo/tools/debug_tools";
-require("./js/bootstrap");
+import {ErrorInfo} from "./tools/debug_tools";
+require("./styles/bootstrap");
 window.Vue = require("vue");
 
 

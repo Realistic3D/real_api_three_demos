@@ -1,7 +1,7 @@
 import * as REAL from "real_api";
-import {EventManager} from "../network_tools/EventManager";
-import {SocketManager} from "../network_tools/SocketManager";
-import {RequestManager} from "../network_tools/RequestManager";
+import {EventManager} from "../networks/EventManager";
+import {SocketManager} from "../networks/SocketManager";
+import {RequestManager} from "../networks/RequestManager";
 import {ErrorInfo} from "./debug_tools";
 
 export class Renderer {
