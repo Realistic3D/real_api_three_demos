@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@tweenjs/tween.js": "17.3.0",
-        "axios": "^0.19.2",
+        "axios": "0.21.2",
         "bootstrap": "^4.4.1",
         "cross-env": "^5.1",
         "jquery": "^3.5.0",
