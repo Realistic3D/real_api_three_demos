@@ -3,7 +3,10 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
 
 export async function House(app) {
-    const model = "./models/gltf/rooms/interior_living_room.glb";
+    // const model = "./models/gltf/rooms/interior_living_room.glb";
+    const model = "./models/gltf/rooms/bathroom.glb";
+    // const model = "./models/gltf/rooms/White living room.glb";
+    // const model = "./models/gltf/rooms/ARQ BLENDER.glb";
     const loader = new GLTFLoader();
     loader.load(model,
         async (mesh)=> {await LoadRoom(app, mesh)},

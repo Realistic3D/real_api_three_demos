@@ -4,6 +4,7 @@ import Scene from "./tools/Scene";
 import {House} from "./room/house";
 import * as REAL from "real_api";
 import {ErrorInfo} from "./tools/debug_tools";
+import {AreaLight} from "./tools/render_tools";
 require("./styles/bootstrap");
 window.Vue = require("vue");
 
@@ -144,6 +145,7 @@ const app = new Vue({
             const that = this;
             that.scene = new Scene(that.$refs.canvas);
             await House(that);
+            await AreaLight(that.scene.scene, that.scene.camera);
         }
     },
     async mounted() {
